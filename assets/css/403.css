@@ -1,0 +1,35 @@
+/*//////////////////////////////////////////////////////////////////
+[ 403 ]*/
+
+.bubble {
+    position: relative;
+    text-align: center;
+    margin: 30px;
+    background-color: var(--black3);
+    border-radius: 20px;
+}
+
+.title_bubble {
+    position: relative;
+    display: block;
+    padding: 10px;
+    font-size: 2em;
+    font-weight: bold;
+}
+
+.bubble .text_content {
+    text-align: center;
+    font-size: 1.25em;
+    padding: 0 10px 20px 10px;
+}
+
+/*//////////////////////////////////////////////////////////////////
+[ Responsive ]*/
+
+@media screen and (max-width: 900px)
+{
+    .bubble 
+    {
+        margin: 30px 5px 30px 5px;
+    }
+}

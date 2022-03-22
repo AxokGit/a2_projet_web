@@ -1,0 +1,10 @@
+/*//////////////////////////////////////////////////////////////////
+[ CANDIDATURES ]*/
+
+.content_title
+{
+  text-align: center;
+  margin: 10px;
+  font-size:calc(30px + 1vw);
+  font-weight: bold;
+}

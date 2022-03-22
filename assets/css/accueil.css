@@ -1,0 +1,52 @@
+/*//////////////////////////////////////////////////////////////////
+[ ACCUEIL ]*/
+
+.bubble {
+    position: relative;
+    text-align: center;
+    margin: 30px;
+    background-color: var(--black3);
+    border-radius: 20px;
+}
+
+.title_bubble {
+    position: relative;
+    display: block;
+    padding: 10px;
+    font-size: 2em;
+    font-weight: bold;
+}
+
+.bubble img {
+    width: 100%;
+    height: 100%;
+    border-radius: 20px;
+}
+
+.bubble .centered {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size:calc(12px + 2vw);
+  font-weight: bold;
+  color: white;
+  width: 100%;
+}
+
+.bubble .text_content {
+    text-align: center;
+    font-size: 1.25em;
+    padding: 0 10px 20px 10px;
+}
+
+/*//////////////////////////////////////////////////////////////////
+[ Responsive ]*/
+
+@media screen and (max-width: 900px)
+{
+    .bubble 
+    {
+        margin: 30px 5px 30px 5px;
+    }
+}

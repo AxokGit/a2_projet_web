@@ -1,0 +1,237 @@
+/*//////////////////////////////////////////////////////////////////
+[ PARAMETRES ]*/
+
+.content_title
+{
+  text-align: center;
+  margin: 10px;
+  font-size:calc(30px + 1vw);
+  font-weight: bold;
+}
+
+.bubble
+{
+    position: relative;
+    text-align: center;
+    margin: 30px;
+    background-color: var(--black3);
+    border-radius: 20px;
+}
+
+.title_bubble
+{
+    position: relative;
+    display: block;
+    padding: 10px;
+    font-size: 2em;
+    font-weight: bold;
+}
+
+.bubble .centered
+{
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size:calc(12px + 2vw);
+  font-weight: bold;
+  color: white;
+  width: 100%;
+}
+
+.bubble .text_content
+{
+    text-align: center;
+    font-size: 1.25em;
+    padding: 0 10px 20px 10px;
+}
+
+.bubble .text_content div {
+  box-sizing: border-box;
+}
+
+.table-container {
+  display: block;
+  width: 90%;
+  max-width: 900px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.flex-table {
+  display: flex;
+  flex-flow: row wrap;
+}
+
+.flex-row {
+  width: calc(100% / 2);
+  text-align: center;
+  padding: 0.2em 0.2em;
+}
+
+.flex-table .name
+{
+  text-align: left;
+}
+
+.flex-table .value
+{
+  text-align: right;
+}
+
+.btnvoir {
+  display: block;
+  background-color: #ff4d4d;
+  border-radius: 10px;
+  border: 4px double #cccccc;
+  color: var(--black1);
+  text-align: center;
+  font-size: 21px;
+  padding: 10px;
+  width: 250px;
+  transition: all 0.5s;
+  cursor: pointer;
+  margin: 5px;
+  position: relative;
+  bottom: 0;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.btnvoir span {
+  cursor: pointer;
+  display: inline-block;
+  position: relative;
+  transition: 0.5s;
+}
+
+.btnvoir span:after {
+  content: "\00bb";
+  position: absolute;
+  opacity: 0;
+  top: 0;
+  right: -20px;
+  transition: 0.5s;
+}
+
+.btnvoir:hover {
+  background-color: #ff0000;
+}
+
+.btnvoir:hover span {
+  padding-right: 25px;
+}
+
+.btnvoir:hover span:after {
+  opacity: 1;
+  right: 0;
+}
+
+/*//////////////////////////////////////////////////////////////////
+[ Modal ] */
+
+.modal 
+{
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgb(0,0,0);
+    background-color: rgba(0,0,0,0.7);
+}
+
+.title_modal
+{
+    border-radius: 10px 10px 0 0;
+    padding: 10px;
+    font-weight: bold;
+    font-size: 2em;
+    text-align: center;
+}
+
+.modal-content 
+{
+    background-color: #ffffff;
+    margin: 15% auto;
+    width: 80%;
+    border-radius: 10px;
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.info_message
+{
+  display: none;
+  width: 80%;
+  margin: 10px auto 20px auto;
+  padding: 10px;
+  border-radius: 10px;
+}
+
+.form_edit_password input
+{
+    width: 80%;
+    height: 25px;
+    margin-left: 10px;
+    font-size: 20px;
+}
+
+.form_edit_password button, .form_edit_password input[type="button"]
+{
+    margin: 10px;
+    width: 120px;
+    height: 40px;
+    font-size: 20px;
+}
+
+.close 
+{
+    color: #aaa;
+    float: right;
+    font-size: 40px;
+    font-weight: bold;
+    right: -20px;
+}
+
+.close:hover, .close:focus 
+{
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+
+/*//////////////////////////////////////////////////////////////////
+[ Responsive ]*/
+
+@media screen and (max-width: 900px)
+{
+    .bubble 
+    {
+        margin: 30px 5px 30px 5px;
+    }
+    .modal-content
+    {
+      width: 90%;
+    }
+}
+
+@media screen and (max-width: 500px) {
+  .flex-row {
+    width: 100%;
+  }
+  .flex-table .name
+  {
+    text-align: left;
+    font-weight: bold ;
+  }
+  .flex-table .value
+  {
+    text-align: center;
+  }
+}
