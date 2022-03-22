@@ -131,7 +131,7 @@
 
 .flex-row
 {
-    width: calc(100% / 4);
+    width: calc(100% / 2);
     text-align: center;
     padding: 0.2em 0.2em;
 }
@@ -163,6 +163,85 @@
     height: 40px;
     margin-right: 10px;
     font-size: 1em;
+}
+
+/*//////////////////////////////////////////////////////////////////
+[ Modal ] */
+
+.modal 
+{
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgb(0,0,0);
+    background-color: rgba(0,0,0,0.7);
+}
+
+.title_modal
+{
+    border-radius: 10px 10px 0 0;
+    padding: 10px;
+    font-weight: bold;
+    font-size: 2em;
+    text-align: center;
+}
+
+.modal-content 
+{
+    background-color: #ffffff;
+    margin: 15% auto;
+    width: 80%;
+    border-radius: 10px;
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.info_message
+{
+  display: none;
+  width: 80%;
+  margin: 10px auto 20px auto;
+  padding: 10px;
+  border-radius: 10px;
+}
+
+.form_postuler input
+{
+    width: 95%;
+    height: 30px;
+    margin-left: 10px;
+    font-size: 20px;
+}
+
+.form_postuler button, .form_postuler input[type="button"]
+{
+    margin: 10px;
+    width: 120px;
+    height: 40px;
+    font-size: 20px;
+}
+
+.close 
+{
+    color: #aaa;
+    float: right;
+    font-size: 40px;
+    font-weight: bold;
+    right: -20px;
+    margin-right: 20px;
+}
+
+.close:hover, .close:focus 
+{
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
 }
 
 /*//////////////////////////////////////////////////////////////////
@@ -200,11 +279,9 @@
     .table-container {
         width: 60%;
     }
-}
-
-@media screen and (max-width: 700px) {
-    .table-container {
-        width: 80%;
+    .modal-content
+    {
+      width: 90%;
     }
     .flex-row {
         width: 100%;
@@ -221,6 +298,13 @@
     {
         width: 100%;
     }
+}
+
+@media screen and (max-width: 700px) {
+    .table-container {
+        width: 80%;
+    }
+    
 }
 
 @media screen and (max-width: 350px) {

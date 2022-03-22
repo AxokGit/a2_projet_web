@@ -19,7 +19,7 @@ if (isset($_SESSION["username"])){
                     $showCandidatures = true;
                 }
             }
-            
+
             if ($showCandidatures){
 
             $query_candidatures = $bdd->prepare($sql);
@@ -43,13 +43,10 @@ if (isset($_SESSION["username"])){
                     <div class="content_title">Candidatures</div>
                     <?php
                     if ($query_candidatures->rowCount() >= 1) {
-                        foreach ($query_candidatures as $result) {
+                        foreach ($results_candidatures as $result) {
                     ?>
                         <div class="bubble">
-                            <div class="title_bubble"><?= $result->name_internship; ?>
-                                    <div id="<?= $result->ID_internship ?>_1" class="heart1 heart-hidden"><i class="far fa-heart"></i></div>
-                                    <div id="<?= $result->ID_internship ?>_2" class="heart2" style="color: red;"><i class="fas fa-heart"></i></div>
-                            </div>
+                            <div class="title_bubble"><?= $result->name_internship; ?></div>
                             <div class="text_content">
                                 <div class="divLeft">
                                     <div class="name_company">
@@ -57,45 +54,28 @@ if (isset($_SESSION["username"])){
                                     </div>
                                     <?= $result->city_localisation; ?> <?= $result->postal_code_localisation; ?>
                                     <div class="description">
-                                        <?= $result->description_internship; ?>
+                                        La prochaine étape de votre candidature est : <?= $result->progression_candidature ?>
                                     </div>
                                 </div>
                                 <div class="divRight">  
                                     <table>
-                                        <div class="table_title">Points importants:</div>
+                                        <div class="table_title">Fichiers en lien avec la candidature:</div>
                                         
                                         <tr>
-                                            <td><i class="far fa-clock"></i></td>
-                                            <td><?= $result->duration_internship; ?> jours</td>
+                                            <td>Curriculum Vitae :</td>
+                                            <td><?= $result->cv_file_path_candidature; ?></td>
                                         </tr>
                                         <tr>
-                                            <td><i class="fas fa-euro-sign"></i></td>
-                                            <td><?= $result->remuneration_internship; ?> €/h</td>
+                                            <td>Lettre de motivation :</td>
+                                            <td><?= $result->lm_file_path_candidature; ?></td>
                                         </tr>
                                         <tr>
-                                            <td><i class="far fa-calendar-alt"></i></td>
-                                            <td><?= $result->offer_date_internship; ?></td>
+                                            <td>Fiche de validation :</td>
+                                            <td><?= $result->validation_form_file_path_candidature; ?></td>
                                         </tr>
                                         <tr>
-                                            <td><i class="fas fa-graduation-cap"></i></td>
-                                            <td><?= $result->name_promotion; ?></td>
-                                        </tr>
-                                        <tr>
-                                            <td><i class="fas fa-user-alt"></i></td>
-                                            <td>
-                                                <?php
-                                                echo $result->place_number_internship;
-                                                if($result->place_number_internship > 1) {echo " places disponibles";}
-                                                else {echo " place disponible";}?>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td><i class="fas fa-chart-bar"></i></td>
-                                            <td><?= $result->competences_internship; ?></td>
-                                        </tr>
-                                        <tr>
-                                            <td><i class="fas fa-handshake"></i></td>
-                                            <td>Confiance du pilote : <?= $result->note; ?></td>
+                                            <td>Convention de stage :</td>
+                                            <td><?= $result->internship_agreement_file_path_candidature; ?></td>
                                         </tr>
                                     </table>
                                 </div>

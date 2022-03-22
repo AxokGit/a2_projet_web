@@ -25,4 +25,18 @@ $(document).ready(function(){
             });
         }
     });
+
+    $(".button_postuler").click(function() {
+        $(".modal").show();
+        $(".info_message").hide();
+    });
+
+    window.onclick = function(event) {
+        if (event.target == document.getElementById("modal_postuler")) {
+            $(".modal").hide();
+        }
+    }
+
+
+
 });

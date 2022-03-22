@@ -93,6 +93,26 @@ if (isset($_SESSION["username"])){
         <link rel="stylesheet" type="text/css" href="assets/css/offres_stages.css">
     </head>
     <body>
+    <div id="modal_postuler" class="modal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <div class="title_modal">Postuler pour </div>
+                <form class="form_postuler" method="post" enctype="multipart/form-data">
+                    <div class="table-container">
+                        <div class="info_message"></div>
+                        <div class="flex-table">
+                            <div class="flex-row name">Curriculum Vitae</div>
+                            <div class="flex-row value"><input id="cv" type="file" name="cv" require></div>
+                        </div>
+                        <div class="flex-table">
+                            <div class="flex-row name">Lettre de motivation</div>
+                            <div class="flex-row value"><input id="lm" type="file" name="lm" require></div>
+                        </div>
+                    </div>
+                    <button type="submit">Envoyer</button>
+                </form>
+            </div>
+        </div>
         <div class="container">
             <?php require "controller/Nav_bar.php" ?>
             <div class="main">
@@ -255,7 +275,7 @@ if (isset($_SESSION["username"])){
                                     </table>
                                 </div>
                                 <div class="button">
-                                    <button class="button_postuler">Postuler</button>
+                                    <button id="button_postuler<?=$result->ID_internship?>" class="button_postuler">Postuler</button>
                                 </div>
                             </div>
                         </div>
