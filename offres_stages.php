@@ -4,7 +4,7 @@
 session_start();
 
 if (isset($_SESSION["username"])){
-    $sql = 'SELECT ID_internship ,name_internship, description_internship, duration_internship, remuneration_internship, offer_date_internship, place_number_internship, competences_internship, city_localisation, postal_code_localisation, GROUP_CONCAT(name_promotion SEPARATOR ", ") AS "name_promotion", name_company, note FROM internships NATURAL JOIN localisations NATURAL JOIN companies NATURAL JOIN internship_for_promo NATURAL JOIN promotions NATURAL JOIN evaluate INNER JOIN users ON evaluate.ID_user=users.ID_user NATURAL JOIN roles WHERE name_role="Pilote" AND visibility_company="O"';
+    $sql = 'SELECT ID_internship ,name_internship, description_internship, duration_internship, remuneration_internship, offer_date_internship, place_number_internship, competences_internship, city_localisation, postal_code_localisation, GROUP_CONCAT(name_promotion SEPARATOR ", ") AS "name_promotion", name_company, email_company, email_company, note FROM internships NATURAL JOIN localisations NATURAL JOIN companies NATURAL JOIN internship_for_promo NATURAL JOIN promotions NATURAL JOIN evaluate INNER JOIN users ON evaluate.ID_user=users.ID_user NATURAL JOIN roles WHERE name_role="Pilote" AND visibility_company="O"';
     $params = [];
     $selected = [];
     if (isset($_GET["localisation"]) && isset($_GET["competences"]) && isset($_GET["confiance"]) && isset($_GET["dateoffre"]) && isset($_GET["duree"]) && isset($_GET["promotion"])){
@@ -77,7 +77,7 @@ if (isset($_SESSION["username"])){
             $query_promotions = $bdd->prepare('SELECT name_promotion FROM internships NATURAL JOIN internship_for_promo NATURAL JOIN promotions NATURAL JOIN companies WHERE visibility_company="O" GROUP BY name_promotion;');
             $query_promotions->execute();
             $results_promotions = $query_promotions->fetchALL(PDO::FETCH_OBJ);
-
+            
             $query_wishlist = $bdd->prepare('SELECT ID_internship FROM internships NATURAL JOIN wishlist INNER JOIN users ON wishlist.ID_user=users.ID_user WHERE username=:user;');
             $query_wishlist->execute(['user' => $_SESSION["username"]]);
             $results_wishlist = $query_wishlist->fetchALL(PDO::FETCH_OBJ);
@@ -85,6 +85,14 @@ if (isset($_SESSION["username"])){
             foreach ($results_wishlist as $result) {
                 array_push($wishlist, $result->ID_internship);
             }
+
+            $query_candidatures = $bdd->prepare('SELECT candidatures.ID_internship FROM candidatures NATURAL JOIN users INNER JOIN internships ON candidatures.ID_internship=internships.ID_internship WHERE username=:user;');
+            $query_candidatures->execute(['user' => $_SESSION["username"]]);
+            $results_candidatures = $query_candidatures->fetchALL(PDO::FETCH_OBJ);
+            $candidatures = [];
+            foreach ($results_candidatures as $result) {
+                array_push($candidatures, $result->ID_internship);
+            }            
 ?>
 <html lang="fr">
     <head>
@@ -96,17 +104,17 @@ if (isset($_SESSION["username"])){
     <div id="modal_postuler" class="modal">
             <div class="modal-content">
                 <span class="close">&times;</span>
-                <div class="title_modal">Postuler pour </div>
-                <form class="form_postuler" method="post" enctype="multipart/form-data">
+                <div class="title_modal"></div>
+                <form class="form_postuler" action="controller/Postuler.php" method="post" enctype="multipart/form-data">
                     <div class="table-container">
                         <div class="info_message"></div>
                         <div class="flex-table">
-                            <div class="flex-row name">Curriculum Vitae</div>
-                            <div class="flex-row value"><input id="cv" type="file" name="cv" require></div>
+                            <div class="flex-row-modal name">Curriculum Vitae</div>
+                            <div class="flex-row-modal value"><input id="cv" type="file" name="cv" require></div>
                         </div>
                         <div class="flex-table">
-                            <div class="flex-row name">Lettre de motivation</div>
-                            <div class="flex-row value"><input id="lm" type="file" name="lm" require></div>
+                            <div class="flex-row-modal name">Lettre de motivation</div>
+                            <div class="flex-row-modal value"><input id="lm" type="file" name="lm" require></div>
                         </div>
                     </div>
                     <button type="submit">Envoyer</button>
@@ -230,7 +238,7 @@ if (isset($_SESSION["username"])){
                                     <div class="name_company">
                                         <?= $result->name_company; ?>
                                     </div>
-                                    <?= $result->city_localisation; ?> <?= $result->postal_code_localisation; ?>
+                                    <?= $result->city_localisation; ?> <?= $result->postal_code_localisation; ?> - <?= $result->email_company; ?>
                                     <div class="description">
                                         <?= $result->description_internship; ?>
                                     </div>
@@ -274,8 +282,14 @@ if (isset($_SESSION["username"])){
                                         </tr>
                                     </table>
                                 </div>
+                                
                                 <div class="button">
-                                    <button id="button_postuler<?=$result->ID_internship?>" class="button_postuler">Postuler</button>
+                                <?php
+                                if (!in_array($result->ID_internship, $candidatures)) { ?>
+                                    <button class="button_postuler" name_internship="<?=$result->name_internship;?>" id_internship="<?=$result->ID_internship?>">Postuler</button>
+                                <?php } else { ?>
+                                    <button class="button_postuler" disabled>Déjà postulé</button>
+                                <?php } ?>
                                 </div>
                             </div>
                         </div>

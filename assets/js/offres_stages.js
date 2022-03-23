@@ -1,3 +1,5 @@
+var ID_internship=0;
+
 $(document).ready(function(){
     $("#li_stages").delay(2000).addClass("hover");
 
@@ -27,8 +29,10 @@ $(document).ready(function(){
     });
 
     $(".button_postuler").click(function() {
-        $(".modal").show();
+        window.ID_internship = $(this).attr("id_internship");
+        $(".title_modal").html("Postuler pour " + $(this).attr("name_internship"));
         $(".info_message").hide();
+        $(".modal").show();
     });
 
     window.onclick = function(event) {
@@ -37,6 +41,13 @@ $(document).ready(function(){
         }
     }
 
+    $('.form_postuler').on('submit',(function(){
+        check = true;
+        if ($('#cv').get(0).files.length === 0 || $('#lm').get(0).files.length === 0) { check = false; }
+        if (check) {$(".form_postuler").append('<input type="hidden" name="ID_internship" value="'+ window.ID_internship +'">');}
+        return check;
+        
+    }));
 
 
 });

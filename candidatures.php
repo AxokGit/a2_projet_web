@@ -25,8 +25,6 @@ if (isset($_SESSION["username"])){
             $query_candidatures = $bdd->prepare($sql);
             $query_candidatures->execute(['user' => $_SESSION["username"]]);
             $results_candidatures = $query_candidatures->fetchALL(PDO::FETCH_OBJ);
-
-
 ?>
 <html lang="fr">
     <head>
@@ -60,22 +58,41 @@ if (isset($_SESSION["username"])){
                                 <div class="divRight">  
                                     <table>
                                         <div class="table_title">Fichiers en lien avec la candidature:</div>
-                                        
                                         <tr>
                                             <td>Curriculum Vitae :</td>
-                                            <td><?= $result->cv_file_path_candidature; ?></td>
+                                            <td>
+                                                <?php
+                                                    if($result->cv_file_path_candidature != "") {echo 'Déposé <i style="color:green;" class="fas fa-check"></i>';}
+                                                    else {echo 'Non disponible <i style="color:red;" class="fas fa-times"></i>';}
+                                                ?>
+                                            </td>
                                         </tr>
                                         <tr>
                                             <td>Lettre de motivation :</td>
-                                            <td><?= $result->lm_file_path_candidature; ?></td>
+                                            <td>
+                                                <?php
+                                                    if($result->lm_file_path_candidature != "") {echo 'Déposé <i style="color:green;" class="fas fa-check"></i>';}
+                                                    else {echo 'Non disponible <i style="color:red;" class="fas fa-times"></i>';}
+                                                ?>
+                                            </td>
                                         </tr>
                                         <tr>
                                             <td>Fiche de validation :</td>
-                                            <td><?= $result->validation_form_file_path_candidature; ?></td>
+                                            <td>
+                                                <?php
+                                                    if($result->validation_form_file_path_candidature != "") {echo 'Déposé <i style="color:green;" class="fas fa-check"></i>';}
+                                                    else {echo 'Non disponible <i style="color:red;" class="fas fa-times"></i>';}
+                                                ?>
+                                            </td>
                                         </tr>
                                         <tr>
                                             <td>Convention de stage :</td>
-                                            <td><?= $result->internship_agreement_file_path_candidature; ?></td>
+                                            <td>
+                                                <?php
+                                                    if($result->internship_agreement_file_path_candidature != "") {echo 'Déposé <i style="color:green;" class="fas fa-check"></i>';}
+                                                    else {echo 'Non disponible <i style="color:red;" class="fas fa-times"></i>';}
+                                                ?>
+                                            </td>
                                         </tr>
                                     </table>
                                 </div>
@@ -88,7 +105,7 @@ if (isset($_SESSION["username"])){
                     <div class="bubble">
                         <div class="title_bubble">Tout est vide...</div>
                         <div class="text_content">
-                            Il n'y a aucun favori dans les parages &nbsp;<i class="fas fa-wind"></i>
+                            Vous n'avez aucune candidature en cours &nbsp;<i class="fas fa-wind"></i>
                         </div>
                     </div>
                     <?php } ?>

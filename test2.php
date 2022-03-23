@@ -1,20 +1,35 @@
-<html>
-<body>
 <?php
+session_start();
 
-/* Get the name of the file uploaded to Apache */
-$filename = $_FILES['file']['name'];
+if (isset($_SESSION["username"])){
+    include "controller/ConnexionBDD.php";
+    if (!$error) {
+        $query_ID_user = $bdd->prepare('SELECT ID_user FROM users WHERE username=:user;');
+        $query_ID_user->execute(['user' => $_SESSION["username"]]);
+        $ID_user = $query_ID_user->fetchALL(PDO::FETCH_OBJ)[0]->ID_user;
 
-/* Prepare to save the file upload to the upload folder */
-$location = "upload/".$filename;
+        $location_cv = "./documents/users/".$ID_user."/".$_FILES['cv']['name'];
+        $location_lm = "./documents/users/".$ID_user."/".$_FILES['lm']['name'];
 
-/* Permanently save the file upload to the upload folder */
-if ( move_uploaded_file($_FILES['file']['tmp_name'], $location) ) { 
-  echo '<p>The HTML5 and php file upload was a success!</p>'; 
-} else { 
-  echo '<p>The php and HTML5 file upload failed.</p>'; 
+        if (!is_dir('./documents/')){
+            mkdir("./documents/", 0700);
+        }
+        if (!is_dir('./documents/users')){
+            mkdir("./documents/users", 0700);
+        }
+        if (!is_dir("./documents/users/".$ID_user)){
+            mkdir("./documents/users/".$ID_user, 0700);
+        }
+
+
+        try {
+            move_uploaded_file($_FILES['cv']['tmp_name'], $location_cv);
+            move_uploaded_file($_FILES['lm']['tmp_name'], $location_lm);
+            echo "tout est ok";
+        }
+        catch (Exception $e) {
+            echo "zut une erreur";
+        }
+    }
 }
-
 ?>
-</body>
-</html>
