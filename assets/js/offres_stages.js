@@ -46,8 +46,5 @@ $(document).ready(function(){
         if ($('#cv').get(0).files.length === 0 || $('#lm').get(0).files.length === 0) { check = false; }
         if (check) {$(".form_postuler").append('<input type="hidden" name="ID_internship" value="'+ window.ID_internship +'">');}
         return check;
-        
     }));
-
-
 });

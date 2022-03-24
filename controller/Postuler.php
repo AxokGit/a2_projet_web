@@ -1,4 +1,14 @@
 <?php
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\SMTP;
+use PHPMailer\PHPMailer\Exception;
+
+require_once '../assets/vendors/phpmailer/src/Exception.php';
+require_once '../assets/vendors/phpmailer/src/PHPMailer.php';
+require_once '../assets/vendors/phpmailer/src/SMTP.php';
+
+$mail = new PHPMailer(true);
+
 session_start();
 
 if (isset($_SESSION["username"])){
@@ -39,7 +49,34 @@ if (isset($_SESSION["username"])){
                 $query_ID_user = $bdd->prepare('INSERT INTO candidatures VALUES (NULL, "1", :location_cv, :location_lm, NULL, NULL, :ID_user, :ID_internship);');
                 $query_ID_user->execute(['location_cv' => $location_cv, 'location_lm' => $location_lm, 'ID_user' => $ID_user, 'ID_internship' => $_POST["ID_internship"]]);
                 
+                try {
+                    $mail->SMTPDebug = SMTP::DEBUG_SERVER;
+                    $mail->isSMTP();
+                    $mail->Host = 'smtp.gmail.com';
+                    $mail->SMTPAuth = true;
+                    $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+                    $mail->Port = 587;
+                
+                    $mail->Username = 'teamspeakcompte@gmail.com';
+                    $mail->Password = 'wptjusfmrxurmgcf';
+
+                    $mail->setFrom('teamspeakcompte@gmail.com', 'CTS');
+                    $mail->addAddress('louisdumont4@gmail.com', 'Louis');
+                
+                    $mail->IsHTML(true);
+                    $mail->Subject = "Send email using Gmail SMTP and PHPMailer";
+                    $mail->Body = 'HTML message body. <b>Gmail</b> SMTP email body.';
+                    $mail->AltBody = 'Plain text message body for non-HTML email client. Gmail SMTP email body.';
+                
+                    $mail->send();
+                    echo "Email message sent.";
+                } catch (Exception $e) {
+                    echo "Error in sending email. Mailer Error: {$mail->ErrorInfo}";
+                }
+
                 echo "<script>location.href='/offres_stages.php';</script>";
+
+
             }
             catch (Exception $e) {
                 echo "zut une erreur";

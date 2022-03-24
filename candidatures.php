@@ -4,7 +4,7 @@
 session_start();
 
 if (isset($_SESSION["username"])){
-    $sql = 'SELECT ID_candidature, progression_candidature, cv_file_path_candidature, lm_file_path_candidature, validation_form_file_path_candidature, internship_agreement_file_path_candidature, name_internship, name_company, ID_user, username, city_localisation, postal_code_localisation FROM candidatures NATURAL JOIN users INNER JOIN internships ON candidatures.ID_internship=internships.ID_internship INNER JOIN localisations ON internships.ID_localisation=localisations.ID_localisation NATURAL JOIN companies WHERE username=:user ORDER BY offer_date_internship ASC;';
+    $sql = 'SELECT ID_candidature, progression_candidature, cv_file_path_candidature, lm_file_path_candidature, validation_form_file_path_candidature, internship_agreement_file_path_candidature, name_internship, name_company, email_company, ID_user, username, city_localisation, postal_code_localisation FROM candidatures NATURAL JOIN users INNER JOIN internships ON candidatures.ID_internship=internships.ID_internship INNER JOIN localisations ON internships.ID_localisation=localisations.ID_localisation NATURAL JOIN companies WHERE username=:user ORDER BY offer_date_internship ASC;';
 
     include "controller/ConnexionBDD.php";
     if (!$error) {
@@ -47,12 +47,23 @@ if (isset($_SESSION["username"])){
                             <div class="title_bubble"><?= $result->name_internship; ?></div>
                             <div class="text_content">
                                 <div class="divLeft">
-                                    <div class="name_company">
+                                    <div class="title_in_bubble">
                                         <?= $result->name_company; ?>
                                     </div>
-                                    <?= $result->city_localisation; ?> <?= $result->postal_code_localisation; ?>
+                                    <?= $result->city_localisation; ?> <?= $result->postal_code_localisation; ?> - <?= $result->email_company; ?>
                                     <div class="description">
-                                        La prochaine étape de votre candidature est : <?= $result->progression_candidature ?>
+                                        <?php if ($result->progression_candidature == 1) { ?>
+                                            <div class="title_in_bubble_status">Status</div>
+                                            <div class="text_stat">La candidature est actuellement en attente de réponse de l'entreprise.</div>
+                                            <div class="title_in_bubble_status">Prochaine étape:</div>
+                                            A partir de l'adresse email de l'entreprise, nous vous invitons à la contacter afin de leur adresser votre CV et lettre de motivation.
+                                            <br>
+                                            <br>
+                                            Est-ce que la réponse de la part de l'entreprise est positive ?
+                                            <br>
+                                            <button class="button">Oui</button>
+                                            <button class="button">Non</button>
+                                        <?php } ?>
                                     </div>
                                 </div>
                                 <div class="divRight">  

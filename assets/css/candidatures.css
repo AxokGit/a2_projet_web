@@ -74,11 +74,23 @@
     width: 50%;
 }
 
-.bubble .divLeft .name_company
+.bubble .divLeft .title_in_bubble
 {
     font-size: 1.25em;
     font-weight: bold;
-    margin: 10px;
+    margin-bottom: 10px;
+}
+
+.bubble .divLeft .title_in_bubble_status
+{
+    font-size: 1em;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.bubble .divLeft .text_stat
+{
+    margin-bottom: 10px;
 }
 
 .bubble .divRight
@@ -140,6 +152,15 @@
   {
     text-align: center;
   }
+
+  .bubble .button
+{
+    width: 130px;
+    height: 40px;
+    margin-right: 10px;
+    margin-top: 5px;
+    font-size: 1em;
+}
 
 /*//////////////////////////////////////////////////////////////////
 [ Responsive ]*/
