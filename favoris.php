@@ -1,37 +1,38 @@
 <!DOCTYPE html>
 
 <?php
-session_start();
 
-if (isset($_SESSION["username"])){
-    $sql = 'SELECT ID_internship ,name_internship, description_internship, duration_internship, remuneration_internship, offer_date_internship, place_number_internship, competences_internship, city_localisation, postal_code_localisation, GROUP_CONCAT(name_promotion SEPARATOR ", ") AS "name_promotion", name_company, visibility_company, note FROM internships NATURAL JOIN localisations NATURAL JOIN companies NATURAL JOIN internship_for_promo NATURAL JOIN promotions NATURAL JOIN evaluate INNER JOIN users ON evaluate.ID_user=users.ID_user NATURAL JOIN roles WHERE name_role="Pilote" AND visibility_company="O" GROUP BY ID_internship ORDER BY offer_date_internship;';
+if (isset($_COOKIE['username']) && isset($_COOKIE['pass'])) {
+	require "controller/ConnexionBDD.php";
+	if (!$error) {
+		$query_check_cookie = $bdd->prepare('SELECT * FROM users NATURAL JOIN roles NATURAL JOIN roles_has_permissions NATURAL JOIN permissions WHERE code_permission="SFx1" AND username=:user AND password_user=:password_user;');
+		$query_check_cookie->execute(['user' => $_COOKIE['username'], 'password_user' => $_COOKIE['pass']]);
+		if ($query_check_cookie->rowCount() == 1){
+            $sql = 'SELECT ID_internship ,name_internship, description_internship, duration_internship, remuneration_internship, offer_date_internship, place_number_internship, competences_internship, city_localisation, postal_code_localisation, GROUP_CONCAT(name_promotion SEPARATOR ", ") AS "name_promotion", name_company, visibility_company, note FROM internships NATURAL JOIN localisations NATURAL JOIN companies NATURAL JOIN internship_for_promo NATURAL JOIN promotions NATURAL JOIN evaluate INNER JOIN users ON evaluate.ID_user=users.ID_user NATURAL JOIN roles WHERE name_role="Pilote" AND visibility_company="O" GROUP BY ID_internship ORDER BY offer_date_internship;';
+                $query_perm = $bdd->prepare('SELECT username, code_permission FROM users NATURAL JOIN roles NATURAL JOIN roles_has_permissions NATURAL JOIN permissions WHERE username=:user;');
+                $query_perm->execute(['user' => $_COOKIE["username"]]);
+                $results_perm = $query_perm->fetchALL(PDO::FETCH_OBJ);
+                if ($query_perm->rowCount() >= 1) {
+                    $showFavoris = false;
 
-    include "controller/ConnexionBDD.php";
-    if (!$error) {
-        $query_perm = $bdd->prepare('SELECT username, code_permission FROM users NATURAL JOIN roles NATURAL JOIN roles_has_permissions NATURAL JOIN permissions WHERE username=:user;');
-        $query_perm->execute(['user' => $_SESSION["username"]]);
-        $results_perm = $query_perm->fetchALL(PDO::FETCH_OBJ);
-        if ($query_perm->rowCount() >= 1) {
-            $showFavoris = false;
+                    foreach ($results_perm as $result) {
+                        if ($result->code_permission == "SFx27" || $result->code_permission == "SFx28"){
+                            $showFavoris = true;
+                        }
+                    }
+                    
+                    if ($showFavoris){
+                        $query_internships = $bdd->prepare($sql);
+                        $query_internships->execute();
+                        $results_internships = $query_internships->fetchALL(PDO::FETCH_OBJ);
 
-            foreach ($results_perm as $result) {
-                if ($result->code_permission == "SFx27" || $result->code_permission == "SFx28"){
-                    $showFavoris = true;
-                }
-            }
-            
-            if ($showFavoris){
-                $query_internships = $bdd->prepare($sql);
-                $query_internships->execute();
-                $results_internships = $query_internships->fetchALL(PDO::FETCH_OBJ);
-
-                $query_wishlist = $bdd->prepare('SELECT ID_internship FROM internships NATURAL JOIN wishlist INNER JOIN users ON wishlist.ID_user=users.ID_user WHERE username=:user;');
-                $query_wishlist->execute(['user' => $_SESSION["username"]]);
-                $results_wishlist = $query_wishlist->fetchALL(PDO::FETCH_OBJ);
-                $wishlist = [];
-                foreach ($results_wishlist as $result) {
-                    array_push($wishlist, $result->ID_internship);
-                }
+                        $query_wishlist = $bdd->prepare('SELECT ID_internship FROM internships NATURAL JOIN wishlist INNER JOIN users ON wishlist.ID_user=users.ID_user WHERE username=:user;');
+                        $query_wishlist->execute(['user' => $_COOKIE["username"]]);
+                        $results_wishlist = $query_wishlist->fetchALL(PDO::FETCH_OBJ);
+                        $wishlist = [];
+                        foreach ($results_wishlist as $result) {
+                            array_push($wishlist, $result->ID_internship);
+                        }
             
 
 
@@ -131,14 +132,19 @@ if (isset($_SESSION["username"])){
     </body>
 </html>
 <?php
+                } else {
+                    header('HTTP/1.0 403 Forbidden');
+                    require "controller/403.php";
+                }
             } else {
                 header('HTTP/1.0 403 Forbidden');
                 require "controller/403.php";
             }
         } else {
-            header('HTTP/1.0 403 Forbidden');
-            require "controller/403.php";
+            echo "<script>location.href='/';</script>";
         }
+    } else {
+        echo "<script>location.href='/';</script>";
     }
 } else {
     echo "<script>location.href='/';</script>";

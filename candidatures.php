@@ -1,30 +1,31 @@
 <!DOCTYPE html>
 
 <?php
-session_start();
+if (isset($_COOKIE['username']) && isset($_COOKIE['pass'])) {
+	require "controller/ConnexionBDD.php";
+	if (!$error) {
+		$query_check_cookie = $bdd->prepare('SELECT * FROM users NATURAL JOIN roles NATURAL JOIN roles_has_permissions NATURAL JOIN permissions WHERE code_permission="SFx1" AND username=:user AND password_user=:password_user;');
+		$query_check_cookie->execute(['user' => $_COOKIE['username'], 'password_user' => $_COOKIE['pass']]);
+		if ($query_check_cookie->rowCount() == 1){
 
-if (isset($_SESSION["username"])){
-    $sql = 'SELECT ID_candidature, progression_candidature, cv_file_path_candidature, lm_file_path_candidature, validation_form_file_path_candidature, internship_agreement_file_path_candidature, name_internship, name_company, email_company, ID_user, username, city_localisation, postal_code_localisation FROM candidatures NATURAL JOIN users INNER JOIN internships ON candidatures.ID_internship=internships.ID_internship INNER JOIN localisations ON internships.ID_localisation=localisations.ID_localisation NATURAL JOIN companies WHERE username=:user ORDER BY offer_date_internship ASC;';
+            $sql = 'SELECT ID_candidature, progression_candidature, cv_file_path_candidature, lm_file_path_candidature, validation_form_file_path_candidature, internship_agreement_file_path_candidature, name_internship, name_company, email_company, ID_user, username, city_localisation, postal_code_localisation FROM candidatures NATURAL JOIN users INNER JOIN internships ON candidatures.ID_internship=internships.ID_internship INNER JOIN localisations ON internships.ID_localisation=localisations.ID_localisation NATURAL JOIN companies WHERE username=:user ORDER BY offer_date_internship ASC;';
+            $query_perm = $bdd->prepare('SELECT username, code_permission FROM users NATURAL JOIN roles NATURAL JOIN roles_has_permissions NATURAL JOIN permissions WHERE username=:user;');
+            $query_perm->execute(['user' => $_COOKIE["username"]]);
+            $results_perm = $query_perm->fetchALL(PDO::FETCH_OBJ);
+            if ($query_perm->rowCount() >= 1) {
+                $showCandidatures = false;
 
-    include "controller/ConnexionBDD.php";
-    if (!$error) {
-        $query_perm = $bdd->prepare('SELECT username, code_permission FROM users NATURAL JOIN roles NATURAL JOIN roles_has_permissions NATURAL JOIN permissions WHERE username=:user;');
-        $query_perm->execute(['user' => $_SESSION["username"]]);
-        $results_perm = $query_perm->fetchALL(PDO::FETCH_OBJ);
-        if ($query_perm->rowCount() >= 1) {
-            $showCandidatures = false;
-
-            foreach ($results_perm as $result) {
-                if ($result->code_permission == "SFx29" || $result->code_permission == "SFx30" || $result->code_permission == "SFx31" || $result->code_permission == "SFx32" || $result->code_permission == "SFx33" || $result->code_permission == "SFx34" || $result->code_permission == "SFx35"){
-                    $showCandidatures = true;
+                foreach ($results_perm as $result) {
+                    if ($result->code_permission == "SFx29" || $result->code_permission == "SFx30" || $result->code_permission == "SFx31" || $result->code_permission == "SFx32" || $result->code_permission == "SFx33" || $result->code_permission == "SFx34" || $result->code_permission == "SFx35"){
+                        $showCandidatures = true;
+                    }
                 }
-            }
 
-            if ($showCandidatures){
+                if ($showCandidatures){
 
-            $query_candidatures = $bdd->prepare($sql);
-            $query_candidatures->execute(['user' => $_SESSION["username"]]);
-            $results_candidatures = $query_candidatures->fetchALL(PDO::FETCH_OBJ);
+                $query_candidatures = $bdd->prepare($sql);
+                $query_candidatures->execute(['user' => $_COOKIE["username"]]);
+                $results_candidatures = $query_candidatures->fetchALL(PDO::FETCH_OBJ);
 ?>
 <html lang="fr">
     <head>
@@ -128,14 +129,19 @@ if (isset($_SESSION["username"])){
     </body>
 </html>
 <?php
+                } else {
+                    header('HTTP/1.0 403 Forbidden');
+                    require "controller/403.php";
+                }
             } else {
                 header('HTTP/1.0 403 Forbidden');
                 require "controller/403.php";
             }
         } else {
-            header('HTTP/1.0 403 Forbidden');
-            require "controller/403.php";
+            echo "<script>location.href='/';</script>";
         }
+    } else {
+        echo "<script>location.href='/';</script>";
     }
 } else {
     echo "<script>location.href='/';</script>";

@@ -1,28 +1,25 @@
 <!DOCTYPE html>
 
 <?php 
-session_start();
+if (isset($_COOKIE['username']) && isset($_COOKIE['pass'])) {
+	require "controller/ConnexionBDD.php";
+	if (!$error) {
+		$query_check_cookie = $bdd->prepare('SELECT * FROM users NATURAL JOIN roles NATURAL JOIN roles_has_permissions NATURAL JOIN permissions WHERE code_permission="SFx1" AND username=:user AND password_user=:password_user;');
+		$query_check_cookie->execute(['user' => $_COOKIE['username'], 'password_user' => $_COOKIE['pass']]);
+		if ($query_check_cookie->rowCount() == 1){
+            $query_perm = $bdd->prepare('SELECT username, code_permission FROM users NATURAL JOIN roles NATURAL JOIN roles_has_permissions NATURAL JOIN permissions WHERE username=:user;');
+            $query_perm->execute(['user' => $_COOKIE["username"]]);
+            $results = $query_perm->fetchALL(PDO::FETCH_OBJ);
+            if ($query_perm->rowCount() >= 1) {
+                $showEnterprises = false;
+                $showStages = false;
 
-if (isset($_SESSION["username"])){
-    include "controller/ConnexionBDD.php";
-    if (!$error) {
-        $query_perm = $bdd->prepare('SELECT username, code_permission FROM users NATURAL JOIN roles NATURAL JOIN roles_has_permissions NATURAL JOIN permissions WHERE username=:user;');
-        $query_perm->execute(['user' => $_SESSION["username"]]);
-        $results = $query_perm->fetchALL(PDO::FETCH_OBJ);
-        if ($query_perm->rowCount() >= 1) {
-            $showEnterprises = false;
-            $showStages = false;
-
-            foreach($results as $result){
-                if ($result->code_permission == "SFx2"){
-                    $showEnterprises = true;
+                foreach($results as $result){
+                    if ($result->code_permission == "SFx2"){ $showEnterprises = true; }
+                    if ($result->code_permission == "SFx8"){ $showStages = true; }
                 }
-                if ($result->code_permission == "SFx8"){
-                    $showStages = true;
-                }
-            }
 
-            if ($showEnterprises ||  $showStages) {
+                if ($showEnterprises ||  $showStages) {
 ?>
 <html lang="fr">
     <head>
@@ -81,14 +78,17 @@ if (isset($_SESSION["username"])){
     </body>
 </html>
 <?php
+
+                }
             } else {
                 header('HTTP/1.0 403 Forbidden');
                 require "controller/403.php";
             }
         } else {
-            header('HTTP/1.0 403 Forbidden');
-            require "controller/403.php";
+            echo "<script>location.href='/controller/Disconnect.php';</script>";
         }
+    } else {
+        echo "<script>location.href='/';</script>";
     }
 } else {
     echo "<script>location.href='/';</script>";

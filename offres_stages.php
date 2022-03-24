@@ -1,98 +1,100 @@
 <!DOCTYPE html>
 
 <?php
-session_start();
+if (isset($_COOKIE['username']) && isset($_COOKIE['pass'])) {
+	require "controller/ConnexionBDD.php";
+	if (!$error) {
+		$query_check_cookie = $bdd->prepare('SELECT * FROM users NATURAL JOIN roles NATURAL JOIN roles_has_permissions NATURAL JOIN permissions WHERE code_permission="SFx1" AND username=:user AND password_user=:password_user;');
+		$query_check_cookie->execute(['user' => $_COOKIE['username'], 'password_user' => $_COOKIE['pass']]);
+		if ($query_check_cookie->rowCount() == 1){
 
-if (isset($_SESSION["username"])){
-    $sql = 'SELECT ID_internship ,name_internship, description_internship, duration_internship, remuneration_internship, offer_date_internship, place_number_internship, competences_internship, city_localisation, postal_code_localisation, GROUP_CONCAT(name_promotion SEPARATOR ", ") AS "name_promotion", name_company, email_company, email_company, note FROM internships NATURAL JOIN localisations NATURAL JOIN companies NATURAL JOIN internship_for_promo NATURAL JOIN promotions NATURAL JOIN evaluate INNER JOIN users ON evaluate.ID_user=users.ID_user NATURAL JOIN roles WHERE name_role="Pilote" AND visibility_company="O"';
-    $params = [];
-    $selected = [];
-    if (isset($_GET["localisation"]) && isset($_GET["competences"]) && isset($_GET["confiance"]) && isset($_GET["dateoffre"]) && isset($_GET["duree"]) && isset($_GET["promotion"])){
-        if ($_GET["localisation"] != ""){
-            $sql = $sql . " AND city_localisation=:localisation";
-            $params['localisation'] = $_GET["localisation"];
-            $selected['localisation'] = $_GET["localisation"];
-        }
-        if ($_GET["competences"] != ""){
-            $sql = $sql . " AND competences_internship LIKE :competences";
-            $params['competences'] = '%'.$_GET["competences"].'%';
-            $selected['competences'] = $_GET["competences"];
-        }
-        if ($_GET["confiance"] != ""){
-            $sql = $sql . " AND note=:note";
-            $params['note'] = $_GET["confiance"];
-            $selected['note'] = $_GET["confiance"];
-        }
-        if ($_GET["dateoffre"] != ""){
-            $sql = $sql . " AND offer_date_internship >= :dateoffre";
-            $params['dateoffre'] = $_GET["dateoffre"];
-            $selected['dateoffre'] = $_GET["dateoffre"];
-        }
-        if ($_GET["duree"] != ""){
-            $sql = $sql . " AND duration_internship = :duree";
-            $params['duree'] = $_GET["duree"];
-            $selected['duree'] = $_GET["duree"];
-        }
-        if ($_GET["promotion"] != ""){
-            $sql = $sql . " AND name_promotion = :promotion";
-            $params['promotion'] = $_GET["promotion"];
-            $selected['promotion'] = $_GET["promotion"];
-        }
-    }
-    $sql = $sql . " GROUP BY ID_internship ORDER BY offer_date_internship ASC;";
-
-    include "controller/ConnexionBDD.php";
-    if (!$error) {
-        $query_perm = $bdd->prepare('SELECT username, code_permission FROM users NATURAL JOIN roles NATURAL JOIN roles_has_permissions NATURAL JOIN permissions WHERE code_permission=:perm AND username=:user;');
-        $query_perm->execute(['user' => $_SESSION["username"], 'perm' => "SFx8"]);
-        if ($query_perm->rowCount() == 1) {
-            $query_internships = $bdd->prepare($sql);
-            $query_internships->execute($params);
-            $results_internships = $query_internships->fetchALL(PDO::FETCH_OBJ);
-
-            $query_localisations = $bdd->prepare('SELECT city_localisation FROM localisations NATURAL JOIN internships NATURAL JOIN companies WHERE visibility_company="O" GROUP BY city_localisation ORDER BY city_localisation ASC;');
-            $query_localisations->execute();
-            $results_localisations = $query_localisations->fetchALL(PDO::FETCH_OBJ);
-
-            $query_competences = $bdd->prepare('SELECT competences_internship FROM internships NATURAL JOIN companies WHERE visibility_company="O";');
-            $query_competences->execute();
-            $results_competences = $query_competences->fetchALL(PDO::FETCH_OBJ);
-            $liste_competences = [];
-            foreach ($results_competences as $result_competences) {
-                foreach (explode(", ", $result_competences->competences_internship) as $result) {
-                    if (!in_array($result, $liste_competences)) {
-                        array_push($liste_competences, $result);
-                    }
+            $sql = 'SELECT ID_internship ,name_internship, description_internship, duration_internship, remuneration_internship, offer_date_internship, place_number_internship, competences_internship, city_localisation, postal_code_localisation, GROUP_CONCAT(name_promotion SEPARATOR ", ") AS "name_promotion", name_company, email_company, email_company, note FROM internships NATURAL JOIN localisations NATURAL JOIN companies NATURAL JOIN internship_for_promo NATURAL JOIN promotions NATURAL JOIN evaluate INNER JOIN users ON evaluate.ID_user=users.ID_user NATURAL JOIN roles WHERE name_role="Pilote" AND visibility_company="O"';
+            $params = [];
+            $selected = [];
+            if (isset($_GET["localisation"]) && isset($_GET["competences"]) && isset($_GET["confiance"]) && isset($_GET["dateoffre"]) && isset($_GET["duree"]) && isset($_GET["promotion"])){
+                if ($_GET["localisation"] != ""){
+                    $sql = $sql . " AND city_localisation=:localisation";
+                    $params['localisation'] = $_GET["localisation"];
+                    $selected['localisation'] = $_GET["localisation"];
+                }
+                if ($_GET["competences"] != ""){
+                    $sql = $sql . " AND competences_internship LIKE :competences";
+                    $params['competences'] = '%'.$_GET["competences"].'%';
+                    $selected['competences'] = $_GET["competences"];
+                }
+                if ($_GET["confiance"] != ""){
+                    $sql = $sql . " AND note=:note";
+                    $params['note'] = $_GET["confiance"];
+                    $selected['note'] = $_GET["confiance"];
+                }
+                if ($_GET["dateoffre"] != ""){
+                    $sql = $sql . " AND offer_date_internship >= :dateoffre";
+                    $params['dateoffre'] = $_GET["dateoffre"];
+                    $selected['dateoffre'] = $_GET["dateoffre"];
+                }
+                if ($_GET["duree"] != ""){
+                    $sql = $sql . " AND duration_internship = :duree";
+                    $params['duree'] = $_GET["duree"];
+                    $selected['duree'] = $_GET["duree"];
+                }
+                if ($_GET["promotion"] != ""){
+                    $sql = $sql . " AND name_promotion = :promotion";
+                    $params['promotion'] = $_GET["promotion"];
+                    $selected['promotion'] = $_GET["promotion"];
                 }
             }
-            
-            $query_notes = $bdd->prepare('SELECT note FROM internships NATURAL JOIN companies NATURAL JOIN evaluate INNER JOIN users ON evaluate.ID_user=users.ID_user NATURAL JOIN roles WHERE name_role="Pilote" AND visibility_company="O" GROUP BY note ORDER BY note ASC;');
-            $query_notes->execute();
-            $results_notes = $query_notes->fetchALL(PDO::FETCH_OBJ);
+            $sql = $sql . " GROUP BY ID_internship ORDER BY offer_date_internship ASC;";
 
-            $query_durations = $bdd->prepare('SELECT ROUND(duration_internship/30) AS duration_internship FROM internships NATURAL JOIN companies WHERE visibility_company="O" GROUP BY duration_internship ORDER BY duration_internship ASC;');
-            $query_durations->execute();
-            $results_durations = $query_durations->fetchALL(PDO::FETCH_OBJ);
+            $query_perm = $bdd->prepare('SELECT username, code_permission FROM users NATURAL JOIN roles NATURAL JOIN roles_has_permissions NATURAL JOIN permissions WHERE code_permission=:perm AND username=:user;');
+            $query_perm->execute(['user' => $_COOKIE["username"], 'perm' => "SFx8"]);
+            if ($query_perm->rowCount() == 1) {
+                $query_internships = $bdd->prepare($sql);
+                $query_internships->execute($params);
+                $results_internships = $query_internships->fetchALL(PDO::FETCH_OBJ);
 
-            $query_promotions = $bdd->prepare('SELECT name_promotion FROM internships NATURAL JOIN internship_for_promo NATURAL JOIN promotions NATURAL JOIN companies WHERE visibility_company="O" GROUP BY name_promotion;');
-            $query_promotions->execute();
-            $results_promotions = $query_promotions->fetchALL(PDO::FETCH_OBJ);
-            
-            $query_wishlist = $bdd->prepare('SELECT ID_internship FROM internships NATURAL JOIN wishlist INNER JOIN users ON wishlist.ID_user=users.ID_user WHERE username=:user;');
-            $query_wishlist->execute(['user' => $_SESSION["username"]]);
-            $results_wishlist = $query_wishlist->fetchALL(PDO::FETCH_OBJ);
-            $wishlist = [];
-            foreach ($results_wishlist as $result) {
-                array_push($wishlist, $result->ID_internship);
-            }
+                $query_localisations = $bdd->prepare('SELECT city_localisation FROM localisations NATURAL JOIN internships NATURAL JOIN companies WHERE visibility_company="O" GROUP BY city_localisation ORDER BY city_localisation ASC;');
+                $query_localisations->execute();
+                $results_localisations = $query_localisations->fetchALL(PDO::FETCH_OBJ);
 
-            $query_candidatures = $bdd->prepare('SELECT candidatures.ID_internship FROM candidatures NATURAL JOIN users INNER JOIN internships ON candidatures.ID_internship=internships.ID_internship WHERE username=:user;');
-            $query_candidatures->execute(['user' => $_SESSION["username"]]);
-            $results_candidatures = $query_candidatures->fetchALL(PDO::FETCH_OBJ);
-            $candidatures = [];
-            foreach ($results_candidatures as $result) {
-                array_push($candidatures, $result->ID_internship);
-            }            
+                $query_competences = $bdd->prepare('SELECT competences_internship FROM internships NATURAL JOIN companies WHERE visibility_company="O";');
+                $query_competences->execute();
+                $results_competences = $query_competences->fetchALL(PDO::FETCH_OBJ);
+                $liste_competences = [];
+                foreach ($results_competences as $result_competences) {
+                    foreach (explode(", ", $result_competences->competences_internship) as $result) {
+                        if (!in_array($result, $liste_competences)) {
+                            array_push($liste_competences, $result);
+                        }
+                    }
+                }
+                
+                $query_notes = $bdd->prepare('SELECT note FROM internships NATURAL JOIN companies NATURAL JOIN evaluate INNER JOIN users ON evaluate.ID_user=users.ID_user NATURAL JOIN roles WHERE name_role="Pilote" AND visibility_company="O" GROUP BY note ORDER BY note ASC;');
+                $query_notes->execute();
+                $results_notes = $query_notes->fetchALL(PDO::FETCH_OBJ);
+
+                $query_durations = $bdd->prepare('SELECT ROUND(duration_internship/30) AS duration_internship FROM internships NATURAL JOIN companies WHERE visibility_company="O" GROUP BY duration_internship ORDER BY duration_internship ASC;');
+                $query_durations->execute();
+                $results_durations = $query_durations->fetchALL(PDO::FETCH_OBJ);
+
+                $query_promotions = $bdd->prepare('SELECT name_promotion FROM internships NATURAL JOIN internship_for_promo NATURAL JOIN promotions NATURAL JOIN companies WHERE visibility_company="O" GROUP BY name_promotion;');
+                $query_promotions->execute();
+                $results_promotions = $query_promotions->fetchALL(PDO::FETCH_OBJ);
+                
+                $query_wishlist = $bdd->prepare('SELECT ID_internship FROM internships NATURAL JOIN wishlist INNER JOIN users ON wishlist.ID_user=users.ID_user WHERE username=:user;');
+                $query_wishlist->execute(['user' => $_COOKIE["username"]]);
+                $results_wishlist = $query_wishlist->fetchALL(PDO::FETCH_OBJ);
+                $wishlist = [];
+                foreach ($results_wishlist as $result) {
+                    array_push($wishlist, $result->ID_internship);
+                }
+
+                $query_candidatures = $bdd->prepare('SELECT candidatures.ID_internship FROM candidatures NATURAL JOIN users INNER JOIN internships ON candidatures.ID_internship=internships.ID_internship WHERE username=:user;');
+                $query_candidatures->execute(['user' => $_COOKIE["username"]]);
+                $results_candidatures = $query_candidatures->fetchALL(PDO::FETCH_OBJ);
+                $candidatures = [];
+                foreach ($results_candidatures as $result) {
+                    array_push($candidatures, $result->ID_internship);
+                }            
 ?>
 <html lang="fr">
     <head>
@@ -302,10 +304,15 @@ if (isset($_SESSION["username"])){
     </body>
 </html>
 <?php
+            } else {
+                header('HTTP/1.0 403 Forbidden');
+                require "controller/403.php";
+            }
         } else {
-            header('HTTP/1.0 403 Forbidden');
-            require "controller/403.php";
+            echo "<script>location.href='/';</script>";
         }
+    } else {
+        echo "<script>location.href='/';</script>";
     }
 } else {
     echo "<script>location.href='/';</script>";

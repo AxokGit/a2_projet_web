@@ -1,13 +1,14 @@
 <!DOCTYPE html>
-
 <?php
-session_start();
-
-if (isset($_SESSION["username"])){
-    echo "<script>location.href='/accueil.php';</script>";
-}
+if (isset($_COOKIE['username']) && isset($_COOKIE['pass'])) {
+	require "controller/ConnexionBDD.php";
+	if (!$error) {
+		$query = $bdd->prepare('SELECT * FROM users NATURAL JOIN roles NATURAL JOIN roles_has_permissions NATURAL JOIN permissions WHERE code_permission="SFx1" AND username=:user AND password_user=:password_user;');
+		$query->execute(['user' => $_COOKIE['username'], 'password_user' => $_COOKIE['pass']]);
+		if ($query->rowCount() == 1){echo "<script>location.href='/accueil.php';</script>";}
+	}
+} else {
 ?>
-
 <html lang="fr">
 	<head>
 		<title>Connexion - CTS</title>
@@ -50,3 +51,6 @@ if (isset($_SESSION["username"])){
 		<script src="assets/js/index.js"></script>
 	</body>
 </html>
+<?php
+}
+?>

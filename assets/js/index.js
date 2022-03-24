@@ -18,8 +18,9 @@
                 'controller/Auth.php',
                 {user: $(input[0]).val().trim(), pass: sha1($(input[1]).val().trim())},
                 function(data, status, jqXHR) {
+                    console.log(data.trim());
                     if (data.trim() == "true"){
-                        window.location.href = "/accueil.php";
+                        location.href='/';
                     } else {
                         $("#zone-login").addClass("shaking_error");
                         setTimeout(function() {

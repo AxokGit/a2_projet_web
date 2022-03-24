@@ -1,9 +1,13 @@
 <!DOCTYPE html>
 
 <?php 
-session_start();
-
-if (isset($_SESSION["username"])){ ?>
+if (isset($_COOKIE['username']) && isset($_COOKIE['pass'])) {
+	require "controller/ConnexionBDD.php";
+	if (!$error) {
+		$query_check_cookie = $bdd->prepare('SELECT * FROM users NATURAL JOIN roles NATURAL JOIN roles_has_permissions NATURAL JOIN permissions WHERE code_permission="SFx1" AND username=:user AND password_user=:password_user;');
+		$query_check_cookie->execute(['user' => $_COOKIE['username'], 'password_user' => $_COOKIE['pass']]);
+		if ($query_check_cookie->rowCount() == 1){
+?>
 <html lang="fr">
     <head>
         <?php require "controller/Head.php" ?>
@@ -24,6 +28,14 @@ if (isset($_SESSION["username"])){ ?>
         <script src="assets/js/gestion_delegates.js"></script>
     </body>
 </html>
-<?php } else {?>
-    <script>location.href='/';</script>
-<?php } ?>
+<?php
+        } else {
+            echo "<script>location.href='/';</script>";
+        }
+    } else {
+        echo "<script>location.href='/';</script>";
+    }
+} else {
+    echo "<script>location.href='/';</script>";
+}
+?>

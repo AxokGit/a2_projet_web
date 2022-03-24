@@ -1,14 +1,16 @@
 <!DOCTYPE html>
 
-<?php 
-session_start();
+<?php
+if (isset($_COOKIE['username']) && isset($_COOKIE['pass'])) {
+	require "controller/ConnexionBDD.php";
+	if (!$error) {
+		$query_check_cookie = $bdd->prepare('SELECT * FROM users NATURAL JOIN roles NATURAL JOIN roles_has_permissions NATURAL JOIN permissions WHERE code_permission="SFx1" AND username=:user AND password_user=:password_user;');
+		$query_check_cookie->execute(['user' => $_COOKIE['username'], 'password_user' => $_COOKIE['pass']]);
+		if ($query_check_cookie->rowCount() == 1){
 
-if (isset($_SESSION["username"])){
-    include "controller/ConnexionBDD.php";
-    if (!$error) {
-        $query = $bdd->prepare('SELECT username, lastname_user, firstname_user, email_user, city_localisation, date_creation, connection_count, GROUP_CONCAT(name_promotion SEPARATOR ", ") AS "name_promotion", name_role FROM a2_projet_web.users NATURAL JOIN user_belong_promo NATURAL JOIN promotions NATURAL JOIN localisations NATURAL JOIN roles WHERE username=:user GROUP BY username;');
-        $query->execute(['user' => $_SESSION["username"]]);
-        $results = $query->fetchALL(PDO::FETCH_OBJ);
+            $query = $bdd->prepare('SELECT username, lastname_user, firstname_user, email_user, city_localisation, date_creation, connection_count, GROUP_CONCAT(name_promotion SEPARATOR ", ") AS "name_promotion", name_role FROM a2_projet_web.users NATURAL JOIN user_belong_promo NATURAL JOIN promotions NATURAL JOIN localisations NATURAL JOIN roles WHERE username=:user GROUP BY username;');
+            $query->execute(['user' => $_COOKIE["username"]]);
+            $results = $query->fetchALL(PDO::FETCH_OBJ);
 ?>
 <html lang="fr">
     <head>
@@ -120,6 +122,11 @@ if (isset($_SESSION["username"])){
     </body>
 </html>
 <?php 
+        } else {
+            echo "<script>location.href='/';</script>";
+        }
+    } else {
+        echo "<script>location.href='/';</script>";
     }
 } else {
     echo "<script>location.href='/';</script>";

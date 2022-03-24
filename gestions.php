@@ -1,38 +1,40 @@
 <!DOCTYPE html>
 
-<?php 
-session_start();
+<?php
+if (isset($_COOKIE['username']) && isset($_COOKIE['pass'])) {
+	require "controller/ConnexionBDD.php";
+	if (!$error) {
+		$query_check_cookie = $bdd->prepare('SELECT * FROM users NATURAL JOIN roles NATURAL JOIN roles_has_permissions NATURAL JOIN permissions WHERE code_permission="SFx1" AND username=:user AND password_user=:password_user;');
+		$query_check_cookie->execute(['user' => $_COOKIE['username'], 'password_user' => $_COOKIE['pass']]);
+		if ($query_check_cookie->rowCount() == 1){
 
-if (isset($_SESSION["username"])){
-    include "controller/ConnexionBDD.php";
-    if (!$error) {
-        $query_perm = $bdd->prepare('SELECT username, code_permission FROM users NATURAL JOIN roles NATURAL JOIN roles_has_permissions NATURAL JOIN permissions WHERE username=:user;');
-        $query_perm->execute(['user' => $_SESSION["username"]]);
-        $results = $query_perm->fetchALL(PDO::FETCH_OBJ);
-        if ($query_perm->rowCount() >= 1) {
-            $showGestion_Enterprises = false;
-            $showGestion_Studients = false;
-            $showGestion_Pilots = false;
-            $showGestion_Delegates = false;
-            $showGestion_Stages = false;
+            $query_perm = $bdd->prepare('SELECT username, code_permission FROM users NATURAL JOIN roles NATURAL JOIN roles_has_permissions NATURAL JOIN permissions WHERE username=:user;');
+            $query_perm->execute(['user' => $_COOKIE["username"]]);
+            $results = $query_perm->fetchALL(PDO::FETCH_OBJ);
+            if ($query_perm->rowCount() >= 1) {
+                $showGestion_Enterprises = false;
+                $showGestion_Studients = false;
+                $showGestion_Pilots = false;
+                $showGestion_Delegates = false;
+                $showGestion_Stages = false;
 
-            foreach($results as $result){
-                if ($result->code_permission == "SFx3" || $result->code_permission == "SFx4" || $result->code_permission == "SFx5" || $result->code_permission == "SFx6" || $result->code_permission == "SFx7"){
-                    $showGestion_Enterprises = true;
+                foreach($results as $result){
+                    if ($result->code_permission == "SFx3" || $result->code_permission == "SFx4" || $result->code_permission == "SFx5" || $result->code_permission == "SFx6" || $result->code_permission == "SFx7"){
+                        $showGestion_Enterprises = true;
+                    }
+                    if ($result->code_permission == "SFx22" || $result->code_permission == "SFx23" || $result->code_permission == "SFx24" || $result->code_permission == "SFx25" || $result->code_permission == "SFx26"){
+                        $showGestion_Studients = true;
+                    }
+                    if ($result->code_permission == "SFx13" || $result->code_permission == "SFx14" || $result->code_permission == "SFx15" || $result->code_permission == "SFx16"){
+                        $showGestion_Pilots = true;
+                    }
+                    if ($result->code_permission == "SFx17" || $result->code_permission == "SFx18" || $result->code_permission == "SFx19" || $result->code_permission == "SFx20" || $result->code_permission == "SFx21"){
+                        $showGestion_Delegates = true;
+                    }
+                    if ($result->code_permission == "SFx9" || $result->code_permission == "SFx10" || $result->code_permission == "SFx11" || $result->code_permission == "SFx12"){
+                        $showGestion_Stages = true;
+                    }
                 }
-                if ($result->code_permission == "SFx22" || $result->code_permission == "SFx23" || $result->code_permission == "SFx24" || $result->code_permission == "SFx25" || $result->code_permission == "SFx26"){
-                    $showGestion_Studients = true;
-                }
-                if ($result->code_permission == "SFx13" || $result->code_permission == "SFx14" || $result->code_permission == "SFx15" || $result->code_permission == "SFx16"){
-                    $showGestion_Pilots = true;
-                }
-                if ($result->code_permission == "SFx17" || $result->code_permission == "SFx18" || $result->code_permission == "SFx19" || $result->code_permission == "SFx20" || $result->code_permission == "SFx21"){
-                    $showGestion_Delegates = true;
-                }
-                if ($result->code_permission == "SFx9" || $result->code_permission == "SFx10" || $result->code_permission == "SFx11" || $result->code_permission == "SFx12"){
-                    $showGestion_Stages = true;
-                }
-            }
 ?>
 <html lang="fr">
     <head>
@@ -108,11 +110,16 @@ if (isset($_SESSION["username"])){
     </body>
 </html>
 <?php
+            } else {
+                header('HTTP/1.0 403 Forbidden');
+                require "controller/403.php";
+            }
         } else {
-            header('HTTP/1.0 403 Forbidden');
-            require "controller/403.php";
-        }
-    } 
+            echo "<script>location.href='/';</script>";
+        } 
+    } else {
+        echo "<script>location.href='/';</script>";
+    }
 } else {
     echo "<script>location.href='/';</script>";
 }
