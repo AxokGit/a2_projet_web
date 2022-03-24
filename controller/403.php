@@ -14,7 +14,7 @@
                     <div class="bubble">
                         <div class="title_bubble">Accès refusé</div>
                         <div class="text_content">
-                            Vous n'avez pas les permissions nécessaires pour accéder à cette page.
+                            Vous n'avez pas les permissions nécessaires pour accéder à cette page ou de réaliser cette action.
                         </div>
                     </div>
                 </div>
