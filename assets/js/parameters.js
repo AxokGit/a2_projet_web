@@ -29,6 +29,7 @@ $(document).ready(function(){
                 new_pass: sha1($(input[1]).val().trim()),
                 confirm_pass: sha1($(input[2]).val().trim())},
             function(data, status, jqXHR) {
+                console.log(data.trim());
                 if (data.trim() == "true"){
                     $(".info_message").html("Mot de passe modifié avec succès");
                     $(".info_message").css("background-color", "#90ee90");
@@ -36,7 +37,7 @@ $(document).ready(function(){
                     for (let pas = 0; pas < 3; pas++) {
                         $(input[pas]).val("");
                     }
-                    setTimeout(function() { $(".info_message").css("display", "none"); }, 4000);
+                    setTimeout(function() { location.href='/controller/Disconnect.php'; }, 1000);
                     
                 } else if (data.trim() == "new_not_match"){
                     $(".info_message").html("Le nouveau mot de passe ne correpond pas avec le champ confirmation");

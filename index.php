@@ -6,6 +6,7 @@ if (isset($_COOKIE['username']) && isset($_COOKIE['pass'])) {
 		$query = $bdd->prepare('SELECT * FROM users NATURAL JOIN roles NATURAL JOIN roles_has_permissions NATURAL JOIN permissions WHERE code_permission="SFx1" AND username=:user AND password_user=:password_user;');
 		$query->execute(['user' => $_COOKIE['username'], 'password_user' => $_COOKIE['pass']]);
 		if ($query->rowCount() == 1){echo "<script>location.href='/accueil.php';</script>";}
+		else {echo "<script>location.href='/controller/Disconnect.php';</script>";}
 	}
 } else {
 ?>
