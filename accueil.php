@@ -12,6 +12,7 @@ if (isset($_COOKIE['username']) && isset($_COOKIE['pass'])) {
     <head>
         <?php require "controller/Head.php" ?>
         <title>Accueil - CTS</title>
+        <meta name="description" content="Page d'accueil de CTS">
         <link rel="stylesheet" type="text/css" href="assets/css/accueil.css">
     </head>
     <body>

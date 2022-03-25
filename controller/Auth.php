@@ -18,7 +18,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {                            /*Seulem
                 $query->execute(['user' => $user]);                 /*Execution de la requête*/
             } else { echo "false";}
             $bdd = null;                                                /*Fin de connexion*/
-        } else {echo "false";}                                          /*Dans le cas d'une erreur de connexion à la BDD, retour false (erreur d'authentification)*/
+        } else {echo "falsee";}                                         /*Dans le cas d'une erreur de connexion à la BDD, retour false (erreur d'authentification)*/
     }
 }
 ?>

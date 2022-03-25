@@ -10,7 +10,7 @@
     </div>
     
     <div class="user">
-        <a href="/parameters.php">
+        <a href="/parameters.php" aria-label="profile_icon">
             <i class="fas fa-user-alt"></i>
         </a>
     </div>

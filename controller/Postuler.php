@@ -66,7 +66,6 @@ if (isset($_COOKIE['username']) && isset($_COOKIE['pass'])) {
                             
                             if ($permAlertPilot) {
                                 try {
-                                    $mail->SMTPDebug = SMTP::DEBUG_SERVER;
                                     $mail->isSMTP();
                                     $mail->Host = 'smtp.gmail.com';
                                     $mail->SMTPAuth = true;

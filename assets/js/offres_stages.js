@@ -35,6 +35,10 @@ $(document).ready(function(){
         $(".modal").show();
     });
 
+    $(".close:eq(0)").click(function() {
+        $(".modal").hide();
+    });
+
     window.onclick = function(event) {
         if (event.target == document.getElementById("modal_postuler")) {
             $(".modal").hide();

@@ -112,11 +112,11 @@ if (isset($_COOKIE['username']) && isset($_COOKIE['pass'])) {
                         <div class="info_message"></div>
                         <div class="flex-table">
                             <div class="flex-row-modal name">Curriculum Vitae</div>
-                            <div class="flex-row-modal value"><input id="cv" type="file" name="cv" require></div>
+                            <div class="flex-row-modal value"><input id="cv" type="file" name="cv" required></div>
                         </div>
                         <div class="flex-table">
                             <div class="flex-row-modal name">Lettre de motivation</div>
-                            <div class="flex-row-modal value"><input id="lm" type="file" name="lm" require></div>
+                            <div class="flex-row-modal value"><input id="lm" type="file" name="lm" required></div>
                         </div>
                     </div>
                     <button type="submit">Envoyer</button>
@@ -135,9 +135,9 @@ if (isset($_COOKIE['username']) && isset($_COOKIE['pass'])) {
                             <form class="filter_form" action="/offres_stages.php" method ="GET">
                                 <div class="table-container">
                                     <div class="flex-table">
-                                        <div class="flex-row name">Localisation:</div>
+                                        <div class="flex-row name"><label for="localisation">Localisation:</label></div>
                                         <div class="flex-row value">
-                                            <select name="localisation">
+                                            <select id="localisation" name="localisation">
                                                 <option value="" selected>-- Choisir une localisation --</option>
                                                 <?php
                                                 foreach($results_localisations as $localisation) {
@@ -150,9 +150,9 @@ if (isset($_COOKIE['username']) && isset($_COOKIE['pass'])) {
                                             </select>
                                         </div>
 
-                                        <div class="flex-row name">Competences:</div>
+                                        <div class="flex-row name"><label for="competences">Competences:</label></div>
                                         <div class="flex-row value">
-                                            <select name="competences">
+                                            <select id="competences" name="competences">
                                                 <option value="" selected>-- Choisir une compétence --</option>
                                                 <?php
                                                 foreach($liste_competences as $competence) {
@@ -165,9 +165,9 @@ if (isset($_COOKIE['username']) && isset($_COOKIE['pass'])) {
                                             </select>
                                         </div>
 
-                                        <div class="flex-row name">Niveau de confiance:</div>
+                                        <div class="flex-row name"><label for="confiance">Niveau de confiance:</label></div>
                                         <div class="flex-row value">
-                                            <select name="confiance">
+                                            <select id="confiance" name="confiance">
                                                 <option value="" selected>-- Choisir une confiance --</option>
                                                 <?php
                                                 foreach($results_notes as $note) {
@@ -180,14 +180,14 @@ if (isset($_COOKIE['username']) && isset($_COOKIE['pass'])) {
                                             </select>
                                         </div>
 
-                                        <div class="flex-row name">Date de début:</div>
+                                        <div class="flex-row name"><label for="dateoffre">Date de début:</label></div>
                                         <div class="flex-row value">
-                                            <input type="date" name="dateoffre">
+                                            <input id="dateoffre" type="date" name="dateoffre">
                                         </div>
-                                        <div class="flex-row name">Durée:</div>
+                                        <div class="flex-row name"><label for="duree">Durée:</label></div>
                                         <div class="flex-row value">
-                                            <select name="duree">
-                                                <option value="" selected>-- Choisir une durée --</option>results_durations
+                                            <select id="duree" name="duree">
+                                                <option value="" selected>-- Choisir une durée --</option>
                                                 <?php
                                                 foreach($results_durations as $duration) {
                                                     if (isset($selected['duree'])) {
@@ -198,9 +198,9 @@ if (isset($_COOKIE['username']) && isset($_COOKIE['pass'])) {
                                                 ?>
                                             </select>
                                         </div>
-                                        <div class="flex-row name">Promotion:</div>
+                                        <div class="flex-row name"><label for="promotion">Promotion:</label></div>
                                         <div class="flex-row value">
-                                            <select name="promotion">
+                                            <select id="promotion" name="promotion">
                                                 <option value="" selected>-- Choisir une promotion --</option>
                                                 <?php
                                                 foreach($results_promotions as $promotion) {
