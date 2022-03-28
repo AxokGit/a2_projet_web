@@ -34,7 +34,7 @@ if (isset($_COOKIE['username']) && isset($_COOKIE['pass'])) {
                         $query_user->execute(['user' => $_COOKIE["username"]]);
                         $results_user = $query_user->fetchALL(PDO::FETCH_OBJ);
 
-                        $query_pilots_of_user = $bdd->prepare('SELECT ID_user, firstname_user, lastname_user, email_user FROM users NATURAL JOIN user_belong_promo NATURAL JOIN promotions INNER JOIN roles ON roles.ID_role=users.ID_role WHERE (name_role="Pilote" OR name_role="Délégué(e)") AND ID_promotion=(SELECT ID_promotion FROM users NATURAL JOIN user_belong_promo NATURAL JOIN promotions WHERE username=:user);');
+                        $query_pilots_of_user = $bdd->prepare('SELECT ID_user, firstname_user, lastname_user, email_user FROM users NATURAL JOIN user_belong_promo NATURAL JOIN promotions INNER JOIN roles ON roles.ID_role=users.ID_role WHERE (name_role="Pilote" OR name_role="Délégué(e)") AND ID_promotion IN (SELECT ID_promotion FROM users NATURAL JOIN user_belong_promo NATURAL JOIN promotions WHERE username=:user);');
                         $query_pilots_of_user->execute(['user' => $_COOKIE["username"]]);
                         $results_pilots_of_user = $query_pilots_of_user->fetchALL(PDO::FETCH_OBJ);
 
@@ -75,7 +75,7 @@ if (isset($_COOKIE['username']) && isset($_COOKIE['pass'])) {
                                     $mail->Username = 'teamspeakcompte@gmail.com';
                                     $mail->Password = 'wptjusfmrxurmgcf';
     
-                                    $mail->setFrom('teamspeakcompte@gmail.com', 'Ceci Ton Stage');
+                                    $mail->setFrom('teamspeakcompte@gmail.com', 'Cesi Ton Stage');
                                     foreach ($results_pilots_of_user as $result) {
                                         $mail->addAddress($result->email_user, $result->firstname_user." ".$result->lastname_user);
                                     }

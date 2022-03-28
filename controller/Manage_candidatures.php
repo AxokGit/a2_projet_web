@@ -15,7 +15,7 @@ if (isset($_COOKIE['username']) && isset($_COOKIE['pass'])) {
 		$query_check_cookie = $bdd->prepare('SELECT * FROM users NATURAL JOIN roles NATURAL JOIN roles_has_permissions NATURAL JOIN permissions WHERE code_permission="SFx1" AND username=:user AND password_user=:password_user;');
 		$query_check_cookie->execute(['user' => $_COOKIE['username'], 'password_user' => $_COOKIE['pass']]);
 		if ($query_check_cookie->rowCount() == 1){
-
+ 
             if (isset($_POST["ID_candidature"]) && isset($_POST["progression_candidature"])) {
                 $ID_candidature = $_POST["ID_candidature"];
                 $progression_candidature = $_POST["progression_candidature"];
@@ -80,7 +80,7 @@ if (isset($_COOKIE['username']) && isset($_COOKIE['pass'])) {
                                     $mail->Username = 'teamspeakcompte@gmail.com';
                                     $mail->Password = 'wptjusfmrxurmgcf';
     
-                                    $mail->setFrom('teamspeakcompte@gmail.com', 'Ceci Ton Stage');
+                                    $mail->setFrom('teamspeakcompte@gmail.com', 'Cesi Ton Stage');
                                     foreach ($results_pilots_of_user as $result) {
                                         $mail->addAddress($result->email_user, $result->firstname_user." ".$result->lastname_user);
                                     }
@@ -114,9 +114,9 @@ if (isset($_COOKIE['username']) && isset($_COOKIE['pass'])) {
                             $query_ID_internship->execute(['ID_candidature' => $ID_candidature]);
                             $results_ID_internship = $query_ID_internship->fetchALL(PDO::FETCH_OBJ);
                             if (is_uploaded_file($_FILES['fvss_signee']['tmp_name'])){
-                                $query_pilots_of_user = $bdd->prepare('SELECT ID_user, firstname_user, lastname_user, email_user FROM users NATURAL JOIN user_belong_promo NATURAL JOIN promotions INNER JOIN roles ON roles.ID_role=users.ID_role WHERE (name_role="Pilote" OR name_role="Délégué(e)") AND ID_promotion=(SELECT ID_promotion FROM users NATURAL JOIN user_belong_promo NATURAL JOIN promotions WHERE username=:user);');
-                                $query_pilots_of_user->execute(['user' => $_COOKIE["username"]]);
-                                $results_pilots_of_user = $query_pilots_of_user->fetchALL(PDO::FETCH_OBJ);
+                                $query_email_user = $bdd->prepare('SELECT email_user, firstname_user, lastname_user FROM users WHERE ID_user=:ID_user;');
+                                $query_email_user->execute(['ID_user' => $ID_user]);
+                                $results_email_user = $query_email_user->fetchALL(PDO::FETCH_OBJ);
 
                                 $location_fvss = "/documents/users/".$ID_user."/"."candidatures/".$results_ID_internship[0]->ID_internship."/".$_FILES['fvss_signee']['name'];
                                 
@@ -130,7 +130,7 @@ if (isset($_COOKIE['username']) && isset($_COOKIE['pass'])) {
                                     $query_update_candidature = $bdd->prepare('UPDATE candidatures SET progression_candidature="4", validation_form_file_path_candidature=:location_fvss WHERE ID_candidature=:ID_candidature;');
                                     $query_update_candidature->execute(['location_fvss' => $location_fvss, 'ID_candidature' => $ID_candidature]);
                                     
-                                    /*try {
+                                    try {
                                         $mail->isSMTP();
                                         $mail->Host = 'smtp.gmail.com';
                                         $mail->SMTPAuth = true;
@@ -140,8 +140,8 @@ if (isset($_COOKIE['username']) && isset($_COOKIE['pass'])) {
                                         $mail->Username = 'teamspeakcompte@gmail.com';
                                         $mail->Password = 'wptjusfmrxurmgcf';
         
-                                        $mail->setFrom('teamspeakcompte@gmail.com', 'Ceci Ton Stage');
-                                        foreach ($results_pilots_of_user as $result) {
+                                        $mail->setFrom('teamspeakcompte@gmail.com', 'Cesi Ton Stage');
+                                        foreach ($results_email_user as $result) {
                                             $mail->addAddress($result->email_user, $result->firstname_user." ".$result->lastname_user);
                                         }
                                         
@@ -154,7 +154,7 @@ if (isset($_COOKIE['username']) && isset($_COOKIE['pass'])) {
                                         echo "Email message sent.";
                                     } catch (Exception $e) {
                                         echo "Error in sending email. Mailer Error: {$mail->ErrorInfo}";
-                                    }*/
+                                    }
 
                                     echo "<script>location.href='/candidatures.php';</script>";
 
@@ -164,6 +164,121 @@ if (isset($_COOKIE['username']) && isset($_COOKIE['pass'])) {
                             }
                         }
                     }
+                } else if ($progression_candidature == "4") {
+                    $ID_user = $_POST["ID_user"];
+                    if (isset($_POST["ID_user"])) {
+                        $query_perm_step5 = $bdd->prepare('SELECT ID_user, code_permission, firstname_user, lastname_user FROM users NATURAL JOIN roles NATURAL JOIN roles_has_permissions NATURAL JOIN permissions WHERE code_permission="SFx34" AND username=:user;');
+                        $query_perm_step5->execute(['user' => $_COOKIE["username"]]);
+                        $results_perm_step5 = $query_perm_step5->fetchALL(PDO::FETCH_OBJ);
+                        if ($query_perm_step5->rowCount() >= 1) {
+                            $query_ID_internship = $bdd->prepare('SELECT ID_internship FROM candidatures WHERE ID_candidature=:ID_candidature;');
+                            $query_ID_internship->execute(['ID_candidature' => $ID_candidature]);
+                            $results_ID_internship = $query_ID_internship->fetchALL(PDO::FETCH_OBJ);
+                            if (is_uploaded_file($_FILES['convention']['tmp_name'])){
+                                $query_email_user = $bdd->prepare('SELECT email_user, firstname_user, lastname_user FROM users WHERE ID_user=:ID_user;');
+                                $query_email_user->execute(['ID_user' => $ID_user]);
+                                $results_email_user = $query_email_user->fetchALL(PDO::FETCH_OBJ);
+
+                                $location_convention = "/documents/users/".$ID_user."/"."candidatures/".$results_ID_internship[0]->ID_internship."/".$_FILES['convention']['name'];
+                                
+                                try {
+                                    if (!is_dir("../documents/users/".$ID_user."/"."candidatures/".$results_ID_internship[0]->ID_internship)){
+                                        mkdir("../documents/users/".$ID_user."/"."candidatures/".$results_ID_internship[0]->ID_internship, 0700);
+                                    }
+
+                                    move_uploaded_file($_FILES['convention']['tmp_name'], "..".$location_convention);
+
+                                    $query_update_candidature = $bdd->prepare('UPDATE candidatures SET progression_candidature="5", internship_agreement_file_path_candidature=:location_convention WHERE ID_candidature=:ID_candidature;');
+                                    $query_update_candidature->execute(['location_convention' => $location_convention, 'ID_candidature' => $ID_candidature]);
+                                    
+                                    try {
+                                        $mail->isSMTP();
+                                        $mail->Host = 'smtp.gmail.com';
+                                        $mail->SMTPAuth = true;
+                                        $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+                                        $mail->Port = 587;
+                                    
+                                        $mail->Username = 'teamspeakcompte@gmail.com';
+                                        $mail->Password = 'wptjusfmrxurmgcf';
+        
+                                        $mail->setFrom('teamspeakcompte@gmail.com', 'Cesi Ton Stage');
+                                        foreach ($results_email_user as $result) {
+                                            $mail->addAddress($result->email_user, $result->firstname_user." ".$result->lastname_user);
+                                        }
+                                        
+                                        $mail->IsHTML(true);
+                                        $mail->Subject = "CTS - Depot de candidature";
+                                        $mail->Body = 'Bonjour, le tuteur <b>'.$results_perm_step5[0]->firstname_user.' '.$results_perm_step5[0]->lastname_user.'</b> a depose la fiche de validation de sujet de stage signee. La prochaine etape conscite a attendre la convention de stage de la part de l\'ecole.';
+                                        //$mail->AltBody = 'Plain text message body for non-HTML email client. Gmail SMTP email body.';
+                                    
+                                        $mail->send();
+                                        echo "Email message sent.";
+                                    } catch (Exception $e) {
+                                        echo "Error in sending email. Mailer Error: {$mail->ErrorInfo}";
+                                    }
+
+                                    echo "<script>location.href='/candidatures.php';</script>";
+
+                                } catch (Exception $e) {
+                                    echo "zut une erreur";
+                                }
+                            }
+                        }
+                    }
+                } else if ($progression_candidature == "5"){
+                    if (isset($_POST["response"])) {
+                        $response = $_POST["response"];
+
+                        $query_perm_step2 = $bdd->prepare('SELECT code_permission FROM users NATURAL JOIN roles NATURAL JOIN roles_has_permissions NATURAL JOIN permissions WHERE code_permission="SFx35" AND username=:user;');
+                        $query_perm_step2->execute(['user' => $_COOKIE["username"]]);
+                        if ($query_perm_step2->rowCount() >= 1) {
+                            $query_check_user_candidature = $bdd->prepare('SELECT * FROM users NATURAL JOIN candidatures WHERE username=:user AND ID_candidature=:ID_candidature;');
+                            $query_check_user_candidature->execute(['user' => $_COOKIE["username"], 'ID_candidature' => $ID_candidature]);
+                            if ($query_perm_step2->rowCount() >= 1) {
+                                if ($response == "y") {
+                                    $query_update_candidature = $bdd->prepare('UPDATE candidatures SET progression_candidature = "6" WHERE ID_candidature=:ID_candidature;');
+                                    $query_update_candidature->execute(['ID_candidature' => $ID_candidature]);
+                                }
+                            }
+
+                            $query_email_user = $bdd->prepare('SELECT email_user, firstname_user, lastname_user FROM users WHERE ID_user=:ID_user;');
+                            $query_email_user->execute(['ID_user' => $ID_user]);
+                            $results_email_user = $query_email_user->fetchALL(PDO::FETCH_OBJ);
+
+                            try {
+                                $mail->isSMTP();
+                                $mail->Host = 'smtp.gmail.com';
+                                $mail->SMTPAuth = true;
+                                $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+                                $mail->Port = 587;
+                            
+                                $mail->Username = 'teamspeakcompte@gmail.com';
+                                $mail->Password = 'wptjusfmrxurmgcf';
+
+                                $mail->setFrom('teamspeakcompte@gmail.com', 'Cesi Ton Stage');
+                                foreach ($results_email_user as $result) {
+                                    $mail->addAddress($result->email_user, $result->firstname_user." ".$result->lastname_user);
+                                }
+                                
+                                $mail->IsHTML(true);
+                                $mail->Subject = "CTS - Depot de candidature";
+                                $mail->Body = 'Bonjour, le tuteur <b>'.$results_perm_step5[0]->firstname_user.' '.$results_perm_step5[0]->lastname_user.'</b> a depose la fiche de validation de sujet de stage signee. La prochaine etape conscite a attendre la convention de stage de la part de l\'ecole.';
+                                //$mail->AltBody = 'Plain text message body for non-HTML email client. Gmail SMTP email body.';
+                            
+                                $mail->send();
+                                echo "Email message sent.";
+                            } catch (Exception $e) {
+                                echo "Error in sending email. Mailer Error: {$mail->ErrorInfo}";
+                            }
+
+
+                            echo "<script>location.href='/candidatures.php';</script>";
+                        } else {
+                            header('HTTP/1.0 403 Forbidden');
+                            require "controller/403.php";
+                        }
+                    }
+
                 }
             }
         }

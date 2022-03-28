@@ -43,7 +43,12 @@ if (isset($_COOKIE['username']) && isset($_COOKIE['pass'])) {
                     $selected['promotion'] = $_GET["promotion"];
                 }
             }
-            $sql = $sql . " GROUP BY ID_internship ORDER BY offer_date_internship ASC;";
+            if (!isset($_GET["page"])){
+                echo "<script>location.href='/offres_stages.php?page=1';</script>";
+
+            }
+            $sql = $sql . " GROUP BY ID_internship ORDER BY offer_date_internship ASC LIMIT 5 OFFSET " . strval((intval($_GET["page"])-1)*5) . ";";
+
 
             $query_perm = $bdd->prepare('SELECT username, code_permission FROM users NATURAL JOIN roles NATURAL JOIN roles_has_permissions NATURAL JOIN permissions WHERE code_permission=:perm AND username=:user;');
             $query_perm->execute(['user' => $_COOKIE["username"], 'perm' => "SFx8"]);
@@ -133,6 +138,11 @@ if (isset($_COOKIE['username']) && isset($_COOKIE['pass'])) {
                         <div class="title_bubble">Filtres de recherche :</div>
                         <div class="text_content" style="display:block;">
                             <form class="filter_form" action="/offres_stages.php" method ="GET">
+                                <?php
+                                if (isset($_GET["page"])) {echo '<input type="hidden" name="page" value="'.$_GET["page"].'" required>';}
+                                else {echo '<input type="hidden" name="page" value="1" required>';}
+                                ?>
+                                
                                 <div class="table-container">
                                     <div class="flex-table">
                                         <div class="flex-row name"><label for="localisation">Localisation:</label></div>
@@ -296,6 +306,17 @@ if (isset($_COOKIE['username']) && isset($_COOKIE['pass'])) {
                             </div>
                         </div>
                     <?php } ?>
+                    <div class="control_bar">
+                        <div class="left">
+                            <i class="fas fa-angle-left"></i>
+                        </div>
+                        <?php
+                            if(isset($_GET['page'])){echo $_GET['page'];}
+                        ?>
+                        <div class="right">
+                            <i class="fas fa-angle-right"></i>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

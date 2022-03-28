@@ -1,10 +1,9 @@
 <?php
-setcookie("username", "louis.dumont", time()+3600, "/");
-setcookie("pass", "c499eec73d18319f4066758e1daf8c84a64e52f7", time()+3600, "/");
-
-if (isset($_COOKIE['username']) && isset($_COOKIE['pass'])) {
-    echo $_COOKIE['username'].$_COOKIE['pass'];
-} else {
-    echo "non";
+require "controller/ConnexionBDD.php";
+if (!$error) {
+    $query_check_cookie = $bdd->prepare('SELECT * FROM users LIMIT :limite;');
+    $query_check_cookie->bindValue(':limite', 2, PDO::PARAM_INT);
+    $query_check_cookie->execute();
+    echo $query_check_cookie->rowCount();
 }
 ?>

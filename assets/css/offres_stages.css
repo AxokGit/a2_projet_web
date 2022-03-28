@@ -163,6 +163,49 @@
     font-size: 1em;
 }
 
+.control_bar
+{
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 2em;
+}
+
+.left
+{
+    display: inline-block;
+    width: 40px;
+    height: 40px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-right: 20px;
+}
+
+.left:hover
+{
+    background-color: black;
+    color: white;
+	transition: all 0.3s;
+}
+
+.right
+{
+    display: inline-block;
+    width: 40px;
+    height: 40px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-left: 20px;
+}
+
+.right:hover
+{
+    background-color: black;
+    color: white;
+    transition: all 0.3s;
+}
+
+
+
 /*//////////////////////////////////////////////////////////////////
 [ Modal ] */
 
