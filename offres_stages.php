@@ -138,11 +138,7 @@ if (isset($_COOKIE['username']) && isset($_COOKIE['pass'])) {
                         <div class="title_bubble">Filtres de recherche :</div>
                         <div class="text_content" style="display:block;">
                             <form class="filter_form" action="/offres_stages.php" method ="GET">
-                                <?php
-                                if (isset($_GET["page"])) {echo '<input type="hidden" name="page" value="'.$_GET["page"].'" required>';}
-                                else {echo '<input type="hidden" name="page" value="1" required>';}
-                                ?>
-                                
+                                <?php echo '<input type="hidden" name="page" value="1" required>'; ?>
                                 <div class="table-container">
                                     <div class="flex-table">
                                         <div class="flex-row name"><label for="localisation">Localisation:</label></div>
