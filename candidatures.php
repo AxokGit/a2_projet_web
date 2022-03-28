@@ -27,7 +27,7 @@ if (isset($_COOKIE['username']) && isset($_COOKIE['pass'])) {
                         $query_candidatures->execute(['user' => $_COOKIE["username"]]);
                         $results_candidatures = $query_candidatures->fetchALL(PDO::FETCH_OBJ);
                     } else if ($results_perm[0]->name_role == "Pilote") {
-                        $sql = 'SELECT ID_candidature, ID_user, username, firstname_user, lastname_user, progression_candidature, cv_file_path_candidature, lm_file_path_candidature, validation_form_file_path_candidature, internship_agreement_file_path_candidature, name_internship, name_company, email_company, city_localisation, postal_code_localisation FROM users NATURAL JOIN user_belong_promo NATURAL JOIN promotions NATURAL JOIN roles NATURAL JOIN candidatures INNER JOIN internships ON candidatures.ID_internship=internships.ID_internship NATURAL JOIN companies INNER JOIN localisations ON internships.ID_localisation=localisations.ID_localisation WHERE name_role="Etudiant" AND ID_promotion IN (SELECT ID_promotion FROM users NATURAL JOIN user_belong_promo NATURAL JOIN promotions WHERE username=:user);';
+                        $sql = 'SELECT ID_candidature, ID_user, username, firstname_user, lastname_user, progression_candidature, cv_file_path_candidature, lm_file_path_candidature, validation_form_file_path_candidature, internship_agreement_file_path_candidature, name_internship, name_company, email_company, city_localisation, postal_code_localisation FROM users NATURAL JOIN user_belong_promo NATURAL JOIN promotions NATURAL JOIN roles NATURAL JOIN candidatures INNER JOIN internships ON candidatures.ID_internship=internships.ID_internship NATURAL JOIN companies INNER JOIN localisations ON internships.ID_localisation=localisations.ID_localisation WHERE name_role="Etudiant" AND ID_promotion IN (SELECT ID_promotion FROM users NATURAL JOIN user_belong_promo NATURAL JOIN promotions WHERE username=:user) ORDER BY lastname_user ASC;';
                         $query_candidatures = $bdd->prepare($sql);
                         $query_candidatures->execute(['user' => $_COOKIE["username"]]);
                         $results_candidatures = $query_candidatures->fetchALL(PDO::FETCH_OBJ);
@@ -63,7 +63,7 @@ if (isset($_COOKIE['username']) && isset($_COOKIE['pass'])) {
                                         <?php
                                         if ($result->progression_candidature == 0) {echo "Vous avez indiquez que l'entreprise a répondu négativemet à votre demande.<br>Ne perdez pas espoir :)";} 
                                         else if ($result->progression_candidature == 1) {?>
-                                            <div class="title_in_bubble_status">Status</div>
+                                            <div class="title_in_bubble_status">Status <?=$result->progression_candidature ?></div>
                                             <div class="text_stat">La candidature est actuellement en attente de réponse de l'entreprise.</div>
                                             <div class="title_in_bubble_status">Prochaine étape:</div>
                                             A partir de l'adresse email de l'entreprise, nous vous invitons à la contacter afin de leur adresser votre CV et lettre de motivation.
@@ -94,7 +94,7 @@ if (isset($_COOKIE['username']) && isset($_COOKIE['pass'])) {
                                             ?>
                                         <?php
                                         } else if ($result->progression_candidature == 2) { ?>
-                                            <div class="title_in_bubble_status">Status</div>
+                                            <div class="title_in_bubble_status">Statut <?=$result->progression_candidature ?></div>
                                                 <div class="text_stat">La candidature est actuellement en attendre d'une fiche de validation de sujet de stage complétée et signée par l'entreprise.</div>
                                                 <div class="title_in_bubble_status">Prochaine étape:</div>
                                                 A présent, vous pouvez envoyer la fiche de validation à l'entreprise pour ensuite la déposer complétée ci-dessous.
@@ -116,7 +116,7 @@ if (isset($_COOKIE['username']) && isset($_COOKIE['pass'])) {
                                                     echo '<br>Vous n\'avez pas la permission d\'entrer la réponse de l\'entreprise... Veuillez contacter votre pilote ou délégué(e).';
                                                 }
                                         } else if ($result->progression_candidature == 3) { ?>
-                                            <div class="title_in_bubble_status">Status</div>
+                                            <div class="title_in_bubble_status">Statut <?=$result->progression_candidature ?></div>
                                             <div class="text_stat">La candidature est actuellement en attendre d'une fiche de validation de sujet de stage signée par le pilote.</div>
                                             <div class="title_in_bubble_status">Prochaine étape:</div>
                                             Le pilote a été averti de votre dépôt. Il signera votre fiche de validation
@@ -189,71 +189,50 @@ if (isset($_COOKIE['username']) && isset($_COOKIE['pass'])) {
                             <div class="text_content">
                                 <div class="divLeft">
                                     <div class="title_in_bubble">
-                                        <?= $result->name_company; ?>
+                                        <?= $result->lastname_user ?> <?= $result->firstname_user ?>
                                     </div>
                                     <?= $result->city_localisation; ?> <?= $result->postal_code_localisation; ?> - <?= $result->email_company; ?>
                                     <div class="description">
                                         <?php
                                         if ($result->progression_candidature == 0) {echo "Vous avez indiquez que l'entreprise a répondu négativemet à votre demande.<br>Ne perdez pas espoir :)";} 
                                         else if ($result->progression_candidature == 1) {?>
-                                            <div class="title_in_bubble_status">Status</div>
+                                            <div class="title_in_bubble_status">Statut <?=$result->progression_candidature ?></div>
                                             <div class="text_stat">La candidature est actuellement en attente de réponse de l'entreprise.</div>
                                             <div class="title_in_bubble_status">Prochaine étape:</div>
-                                            A partir de l'adresse email de l'entreprise, nous vous invitons à la contacter afin de leur adresser votre CV et lettre de motivation.
-                                            <br>
-                                            
-                                            <?php
-                                            $query_perm_step2 = $bdd->prepare('SELECT code_permission FROM users NATURAL JOIN roles NATURAL JOIN roles_has_permissions NATURAL JOIN permissions WHERE code_permission="SFx31" AND username=:user;');
-                                            $query_perm_step2->execute(['user' => $_COOKIE["username"]]);
-                                            if ($query_perm_step2->rowCount() >= 1) {
-                                                echo '<br>Est-ce que la réponse de l\'entreprise est positive ?<br>';
-                                                ?>
-                                                <form action="/controller/Manage_candidatures.php" method="post">
-                                                    <input type="hidden" name="response" value="y">
-                                                    <input type="hidden" name="ID_candidature" value="<?=$result->ID_candidature?>">
-                                                    <input type="hidden" name="progression_candidature" value="<?=$result->progression_candidature?>">
-                                                    <button class="button" type="submit">Oui</button>
-                                                </form>
-                                                <form action="/controller/Manage_candidatures.php" method="post">
-                                                    <input type="hidden" name="response" value="n">
-                                                    <input type="hidden" name="ID_candidature" value="<?=$result->ID_candidature?>">
-                                                    <input type="hidden" name="progression_candidature" value="<?=$result->progression_candidature?>">
-                                                    <button class="button" type="submit">Non</button>
-                                                </form>
-                                            <?php
-                                            } else {
-                                                echo '<br>Vous n\'avez pas la permission d\'entrer la réponse de l\'entreprise... Veuillez contacter votre pilote ou délégué(e).';
-                                            }
-                                            ?>
+                                            L'étudiant a envoyé son CV et sa lettre de motivation et est dans l'attente d'une réponse de l'entreprise, il indiquera la réponse de cette dernière dès que possible.
+
                                         <?php
                                         } else if ($result->progression_candidature == 2) { ?>
-                                            <div class="title_in_bubble_status">Status</div>
+                                            <div class="title_in_bubble_status">Statut <?=$result->progression_candidature ?></div>
                                                 <div class="text_stat">La candidature est actuellement en attendre d'une fiche de validation de sujet de stage complétée et signée par l'entreprise.</div>
                                                 <div class="title_in_bubble_status">Prochaine étape:</div>
-                                                A présent, vous pouvez envoyer la fiche de validation à l'entreprise pour ensuite la déposer complétée ci-dessous.
+                                                L'étudiant a envoyé la fiche de validation de sujet de stage à l'entreprise. Vous serez aerti par mail lorsqu'il la déposera.
                                                 <br>
                                                 
-                                                <?php
-                                                $query_perm_step3 = $bdd->prepare('SELECT code_permission FROM users NATURAL JOIN roles NATURAL JOIN roles_has_permissions NATURAL JOIN permissions WHERE code_permission="SFx32" AND username=:user;');
+                                                
+                                        <?php
+                                        } else if ($result->progression_candidature == 3) { ?>
+                                            <div class="title_in_bubble_status">Statut <?=$result->progression_candidature ?></div>
+                                            <div class="text_stat">La candidature est actuellement en attendre d'une fiche de validation de sujet de stage signée par le pilote.</div>
+                                            <div class="title_in_bubble_status">Prochaine étape:</div>
+                                            Vous pouvez dès à présent signer la fiche de validation de sujet de stage que l'étudiant a déposé.
+                                            <br>
+                                            <?php
+                                                $query_perm_step3 = $bdd->prepare('SELECT code_permission FROM users NATURAL JOIN roles NATURAL JOIN roles_has_permissions NATURAL JOIN permissions WHERE code_permission="SFx33" AND username=:user;');
                                                 $query_perm_step3->execute(['user' => $_COOKIE["username"]]);
                                                 if ($query_perm_step3->rowCount() >= 1) { ?>
                                                     <br>
                                                     <form action="controller/Manage_candidatures.php" method="post" enctype="multipart/form-data">
-                                                        <div class="flex-row-modal value"><input id="fvss" type="file" name="fvss" required></div>
+                                                        <div class="flex-row-modal value"><input id="fvss_signee" type="file" name="fvss_signee" required></div>
                                                         <input type="hidden" name="ID_candidature" value="<?= $result->ID_candidature ?>" required>
+                                                        <input type="hidden" name="ID_user" value="<?= $result->ID_user ?>" required>
                                                         <input type="hidden" name="progression_candidature" value="<?= $result->progression_candidature ?>" required>
                                                         <br>
                                                         <button class="button" type="submit">Envoyer</button>
                                                     </form>
                                                 <?php } else {
                                                     echo '<br>Vous n\'avez pas la permission d\'entrer la réponse de l\'entreprise... Veuillez contacter votre pilote ou délégué(e).';
-                                                }
-                                        } else if ($result->progression_candidature == 3) { ?>
-                                            <div class="title_in_bubble_status">Status</div>
-                                            <div class="text_stat">La candidature est actuellement en attendre d'une fiche de validation de sujet de stage signée par le pilote.</div>
-                                            <div class="title_in_bubble_status">Prochaine étape:</div>
-                                            Le pilote a été averti de votre dépôt. Il signera votre fiche de validation
-                                            <br>
+                                                } ?>
                                         <?php
                                         } ?>
                                     </div>

@@ -103,6 +103,67 @@ if (isset($_COOKIE['username']) && isset($_COOKIE['pass'])) {
                             }
                         }
                     }
+                } else if ($progression_candidature == "3") {
+                    $ID_user = $_POST["ID_user"];
+                    if (isset($_POST["ID_user"])) {
+                        $query_perm_step4 = $bdd->prepare('SELECT ID_user, code_permission, firstname_user, lastname_user FROM users NATURAL JOIN roles NATURAL JOIN roles_has_permissions NATURAL JOIN permissions WHERE code_permission="SFx32" AND username=:user;');
+                        $query_perm_step4->execute(['user' => $_COOKIE["username"]]);
+                        $results_perm_step4 = $query_perm_step4->fetchALL(PDO::FETCH_OBJ);
+                        if ($query_perm_step4->rowCount() >= 1) {
+                            $query_ID_internship = $bdd->prepare('SELECT ID_internship FROM candidatures WHERE ID_candidature=:ID_candidature;');
+                            $query_ID_internship->execute(['ID_candidature' => $ID_candidature]);
+                            $results_ID_internship = $query_ID_internship->fetchALL(PDO::FETCH_OBJ);
+                            if (is_uploaded_file($_FILES['fvss_signee']['tmp_name'])){
+                                $query_pilots_of_user = $bdd->prepare('SELECT ID_user, firstname_user, lastname_user, email_user FROM users NATURAL JOIN user_belong_promo NATURAL JOIN promotions INNER JOIN roles ON roles.ID_role=users.ID_role WHERE (name_role="Pilote" OR name_role="Délégué(e)") AND ID_promotion=(SELECT ID_promotion FROM users NATURAL JOIN user_belong_promo NATURAL JOIN promotions WHERE username=:user);');
+                                $query_pilots_of_user->execute(['user' => $_COOKIE["username"]]);
+                                $results_pilots_of_user = $query_pilots_of_user->fetchALL(PDO::FETCH_OBJ);
+
+                                $location_fvss = "/documents/users/".$ID_user."/"."candidatures/".$results_ID_internship[0]->ID_internship."/".$_FILES['fvss_signee']['name'];
+                                
+                                try {
+                                    if (!is_dir("../documents/users/".$ID_user."/"."candidatures/".$results_ID_internship[0]->ID_internship)){
+                                        mkdir("../documents/users/".$ID_user."/"."candidatures/".$results_ID_internship[0]->ID_internship, 0700);
+                                    }
+
+                                    move_uploaded_file($_FILES['fvss_signee']['tmp_name'], "..".$location_fvss);
+
+                                    $query_update_candidature = $bdd->prepare('UPDATE candidatures SET progression_candidature="4", validation_form_file_path_candidature=:location_fvss WHERE ID_candidature=:ID_candidature;');
+                                    $query_update_candidature->execute(['location_fvss' => $location_fvss, 'ID_candidature' => $ID_candidature]);
+                                    
+                                    /*try {
+                                        $mail->isSMTP();
+                                        $mail->Host = 'smtp.gmail.com';
+                                        $mail->SMTPAuth = true;
+                                        $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+                                        $mail->Port = 587;
+                                    
+                                        $mail->Username = 'teamspeakcompte@gmail.com';
+                                        $mail->Password = 'wptjusfmrxurmgcf';
+        
+                                        $mail->setFrom('teamspeakcompte@gmail.com', 'Ceci Ton Stage');
+                                        foreach ($results_pilots_of_user as $result) {
+                                            $mail->addAddress($result->email_user, $result->firstname_user." ".$result->lastname_user);
+                                        }
+                                        
+                                        $mail->IsHTML(true);
+                                        $mail->Subject = "CTS - Depot de candidature";
+                                        $mail->Body = 'Bonjour, le tuteur <b>'.$results_perm_step4[0]->firstname_user.' '.$results_perm_step4[0]->lastname_user.'</b> a depose la fiche de validation de sujet de stage signee. La prochaine etape conscite a attendre la convention de stage de la part de l\'ecole.';
+                                        //$mail->AltBody = 'Plain text message body for non-HTML email client. Gmail SMTP email body.';
+                                    
+                                        $mail->send();
+                                        echo "Email message sent.";
+                                    } catch (Exception $e) {
+                                        echo "Error in sending email. Mailer Error: {$mail->ErrorInfo}";
+                                    }*/
+
+                                    echo "<script>location.href='/candidatures.php';</script>";
+
+                                } catch (Exception $e) {
+                                    echo "zut une erreur";
+                                }
+                            }
+                        }
+                    }
                 }
             }
         }
