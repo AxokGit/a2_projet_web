@@ -7,7 +7,7 @@ if (isset($_COOKIE['username']) && isset($_COOKIE['pass'])) {
 		$query_check_cookie = $bdd->prepare('SELECT * FROM users NATURAL JOIN roles NATURAL JOIN roles_has_permissions NATURAL JOIN permissions WHERE code_permission="SFx1" AND username=:user AND password_user=:password_user;');
 		$query_check_cookie->execute(['user' => $_COOKIE['username'], 'password_user' => $_COOKIE['pass']]);
 		if ($query_check_cookie->rowCount() == 1){
-            $sql = 'SELECT companies.ID_company, name_company, activity_sector_company, nb_intern_cesi_company, email_company, visibility_company FROM companies LEFT JOIN companies_located ON companies.ID_company=companies_located.ID_company LEFT JOIN localisations ON companies_located.ID_localisation=localisations.ID_localisation;';
+            $sql = 'SELECT companies.ID_company, name_company, activity_sector_company, nb_intern_cesi_company, email_company, visibility_company, companies_located.ID_localisation FROM companies LEFT JOIN companies_located ON companies.ID_company=companies_located.ID_company LEFT JOIN localisations ON companies_located.ID_localisation=localisations.ID_localisation;';
 
             $query_perm = $bdd->prepare('SELECT username, code_permission FROM users NATURAL JOIN roles NATURAL JOIN roles_has_permissions NATURAL JOIN permissions WHERE code_permission=:perm AND username=:user;');
             $query_perm->execute(['user' => $_COOKIE["username"], 'perm' => "SFx2"]);
@@ -19,30 +19,6 @@ if (isset($_COOKIE['username']) && isset($_COOKIE['pass'])) {
                 $query_localisations = $bdd->prepare('SELECT ID_localisation, city_localisation FROM localisations GROUP BY city_localisation ORDER BY city_localisation ASC;');
                 $query_localisations->execute();
                 $results_localisations = $query_localisations->fetchALL(PDO::FETCH_OBJ);
-
-                /*$query_localisations = $bdd->prepare('SELECT city_localisation FROM companies NATURAL JOIN companies_located NATURAL JOIN localisations GROUP BY city_localisation ORDER BY city_localisation ASC;');
-                $query_localisations->execute();
-                $results_localisations = $query_localisations->fetchALL(PDO::FETCH_OBJ);
-
-                $query_activity_sector = $bdd->prepare('SELECT activity_sector_company FROM companies WHERE visibility_company="O" GROUP BY activity_sector_company;');
-                $query_activity_sector->execute();
-                $results_activity_sector = $query_activity_sector->fetchALL(PDO::FETCH_OBJ);
-                $liste_activity_sector = [];
-                foreach ($results_activity_sector as $result_activity_sector) {
-                    foreach (explode(", ", $result_activity_sector->activity_sector_company) as $result) {
-                        if (!in_array($result, $liste_activity_sector)) {
-                            array_push($liste_activity_sector, $result);
-                        }
-                    }
-                }*/
-                
-                /*$query_notes = $bdd->prepare('SELECT note FROM companies NATURAL JOIN evaluate INNER JOIN users ON evaluate.ID_user=users.ID_user NATURAL JOIN roles WHERE name_role="Pilote" GROUP BY note ORDER BY note ASC;');
-                $query_notes->execute();
-                $results_notes = $query_notes->fetchALL(PDO::FETCH_OBJ);
-
-                $query_nb_stages = $bdd->prepare('SELECT * FROM (SELECT COUNT(internships.ID_company) AS "number_of_internships" FROM companies LEFT JOIN internships ON companies.ID_company=internships.ID_company GROUP BY internships.ID_company) AS T GROUP BY number_of_internships ORDER BY number_of_internships ASC;');
-                $query_nb_stages->execute();
-                $results_nb_stages = $query_nb_stages->fetchALL(PDO::FETCH_OBJ);*/
 ?>
 <html lang="fr">
     <head>
@@ -54,7 +30,7 @@ if (isset($_COOKIE['username']) && isset($_COOKIE['pass'])) {
         <div id="modal_add_edit" class="modal">
             <div class="modal-content">
                 <span class="close">&times;</span>
-                <div class="title_modal">Ajout d'une entreprise</div>
+                <div class="title_modal"></div>
                 <form class="form_add_edit" method="POST" action="/controller/Manage_companies.php">
                     <input type="hidden" name="action" value="add">
                     <div class="table-container">
@@ -79,19 +55,19 @@ if (isset($_COOKIE['username']) && isset($_COOKIE['pass'])) {
                             <div class="flex-row name">Confiance :</div>
                             <div class="flex-row value">
                                 <select class="input" name="note" id="select_note" required>
-                                    <option value="A" selected>--Choisir une note--</option>
+                                    <option value="A">--Choisir une note--</option>
                                     <option value="A">A</option>
                                     <option value="B">B</option>
                                     <option value="C">C</option>
                                     <option value="D">D</option>
-                                </select>    
+                                </select>
                             </div>
                         </div>
                         <div class="flex-table">
                             <div class="flex-row name">Localisation :</div>
                             <div class="flex-row value">
                                 <select class="input" name="localisation" id="select_localisation" required>
-                                    <option value="" selected>--Choisir une ville--</option>
+                                    <option value="">--Choisir une ville--</option>
                                     <?php foreach ($results_localisations as $result) { ?>
                                         <option value="<?= $result->ID_localisation ?>"><?= $result->city_localisation ?></option>
                                     <?php } ?>
@@ -102,7 +78,7 @@ if (isset($_COOKIE['username']) && isset($_COOKIE['pass'])) {
                             <div class="flex-row name">Visibilité :</div>
                             <div class="flex-row value">
                                 <select class="input" name="visibility" id="select_visibility" required>
-                                    <option value="A" selected>--Choisir une visibilité--</option>
+                                    <option value="A">--Choisir une visibilité--</option>
                                     <option value="O">Oui</option>
                                     <option value="N">Non</option>
                                 </select>
@@ -113,11 +89,6 @@ if (isset($_COOKIE['username']) && isset($_COOKIE['pass'])) {
                 </form>
             </div>
         </div>
-
-
-
-
-
 
         <div class="container">
             <?php require "controller/Nav_bar.php" ?>
@@ -148,7 +119,7 @@ if (isset($_COOKIE['username']) && isset($_COOKIE['pass'])) {
                                 <td><?= $result->visibility_company ?></td>
                                 <td>
                                     <div class="actions">
-                                        <i ID_company="<?= $result->ID_company ?>" class="fas fa-pen logo_edit"></i>
+                                        <i ID_company="<?= $result->ID_company ?>" name="<?= $result->name_company ?>" activity_sector="<?= $result->activity_sector_company ?>" nb_intern="<?= $result->nb_intern_cesi_company ?>" email="<?= $result->email_company ?>" localisation="<?= $result->ID_localisation ?>" visibility="<?= $result->visibility_company ?>" class="fas fa-pen logo_edit"></i>
                                         <i ID_company="<?= $result->ID_company ?>" class="fas fa-trash-alt logo_delete"></i>
                                     </div>
                                 </td>

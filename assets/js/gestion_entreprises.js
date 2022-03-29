@@ -4,6 +4,7 @@ $(document).ready(function(){
 
     $(".logo_add").click(function() {
         $(".modal").show();
+        $(".title_modal").html("Ajout d'une entreprise");
         $(".info_message").css("display", "none");
     });
 
@@ -23,6 +24,20 @@ $(document).ready(function(){
     }));
 
 
+    $(".logo_edit").click(function() {
+        $(".modal").show();
+        $(".title_modal").html("Modification d'une entreprise");
+        $("input[name='name']").attr("value",$(this).attr("name"));
+        $("input[name='activity_sector']").attr("value",$(this).attr("activity_sector"));
+        $("input[name='nb_intern_cesi']").attr("value",$(this).attr("nb_intern"));
+        $("input[name='email']").attr("value",$(this).attr("email"));
+
+        $("select[name='localisation'] option[value="+$(this).attr("localisation")+"]").prop('selected', true);
+        $("select[name='visibility'] option[value="+$(this).attr("visibility")+"]").prop('selected', true);
+        $(".info_message").css("display", "none");
+    });
+
+
     $(".logo_delete").click(function() {
         console.log($(this).attr("ID_company"));
         $.post(
@@ -40,4 +55,10 @@ $(document).ready(function(){
             }
             );
     });
+
+
+
+
+
+    
 });
