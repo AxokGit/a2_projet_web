@@ -1,6 +1,12 @@
 /*//////////////////////////////////////////////////////////////////
 [ PARAMETRES ]*/
 
+:root
+{
+  --blue1: #4272a0;
+  --blue2: #5393ce;
+}
+
 .content_title
 {
   text-align: center;
@@ -125,6 +131,16 @@
 .btnvoir:hover span:after {
   opacity: 1;
   right: 0;
+}
+
+.btn_a_propos
+{
+  background-color: var(--blue1) !important;
+}
+
+.btn_a_propos:hover
+{
+  background-color: var(--blue2) !important;
 }
 
 /*//////////////////////////////////////////////////////////////////

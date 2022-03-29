@@ -17,12 +17,17 @@ if (isset($_COOKIE['username']) && isset($_COOKIE['pass'])) {
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<link rel="icon" type="image/png" href="assets/images/logo_petit.png">
 		<link rel="stylesheet" type="text/css" href="assets/css/index.css">
+		<meta name="description" content="Page d'accueil de CTS">
+		<link rel="manifest" href="./manifest/manifest.json" />
+		<meta name="theme-color" content="#3f51b5"/>
+		<link rel="apple-touch-icon" href="assets/images/logo512.png">
 	</head>
 	<body>
 		<div class="limiter">
 			<div class="boite-login">
 				<div id="zone-login" class="zone-login hidden">
 					<form method="post" class="form-login validate">
+						<div class="info_message">Erreur de connexion Internet, veuillez vous connecter</div>
 
 						<span class="form-title"><img src="assets/images/logo.png" alt="Cesi Ton Stage"></span>
 

@@ -108,10 +108,14 @@ if (isset($_COOKIE['username']) && isset($_COOKIE['pass'])) {
                             </div>
                         </div>
                     </div>
-                    
                     <div>
                         <a class="btnvoir" href="controller/Disconnect.php">
                             <span>Se déconnecter</span>
+                        </a>
+                    </div>
+                    <div>
+                        <a class="btnvoir btn_a_propos" href="a_propos.php">
+                            <span>A propos</span>
                         </a>
                     </div>
                 </div>

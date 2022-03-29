@@ -14,10 +14,12 @@
         }
 
         if (check){
-            $.post(
-                'controller/Auth.php',
-                {user: $(input[0]).val().trim(), pass: sha1($(input[1]).val().trim())},
-                function(data, status, jqXHR) {
+            if (window.navigator.onLine){
+                $.ajax({
+                type: 'POST',
+                url: 'controller/Auth.php',
+                data: {user: $(input[0]).val().trim(), pass: sha1($(input[1]).val().trim())},
+                success: function(data, status, jqXHR) {
                     console.log(data.trim());
                     if (data.trim() == "true"){
                         location.href='/';
@@ -27,7 +29,10 @@
                             $("#zone-login").removeClass("shaking_error");
                         }, 1000);
                     }
-            });
+                }});
+            } else {
+                $(".info_message").show();
+            }
         }
         check = false;
         return check;
@@ -68,3 +73,16 @@ function httpGet(theUrl) {
 // [ Other ]
 
 $('.hidden').delay(300).fadeIn(400);
+
+
+if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('sw.js')
+        .then(registration => {
+          console.log(`Service Worker enregistré ! Ressource: ${registration.scope}`);
+        })  
+        .catch(err => {
+          console.log(`Echec de l'enregistrement du Service Worker: ${err}`);
+        });
+    });
+}

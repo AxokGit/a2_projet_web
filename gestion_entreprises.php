@@ -7,7 +7,7 @@ if (isset($_COOKIE['username']) && isset($_COOKIE['pass'])) {
 		$query_check_cookie = $bdd->prepare('SELECT * FROM users NATURAL JOIN roles NATURAL JOIN roles_has_permissions NATURAL JOIN permissions WHERE code_permission="SFx1" AND username=:user AND password_user=:password_user;');
 		$query_check_cookie->execute(['user' => $_COOKIE['username'], 'password_user' => $_COOKIE['pass']]);
 		if ($query_check_cookie->rowCount() == 1){
-            $sql = 'SELECT * FROM companies ;';
+            $sql = 'SELECT companies.ID_company, name_company, activity_sector_company, nb_intern_cesi_company, email_company, visibility_company FROM companies LEFT JOIN companies_located ON companies.ID_company=companies_located.ID_company LEFT JOIN localisations ON companies_located.ID_localisation=localisations.ID_localisation;';
 
             $query_perm = $bdd->prepare('SELECT username, code_permission FROM users NATURAL JOIN roles NATURAL JOIN roles_has_permissions NATURAL JOIN permissions WHERE code_permission=:perm AND username=:user;');
             $query_perm->execute(['user' => $_COOKIE["username"], 'perm' => "SFx2"]);
@@ -103,9 +103,9 @@ if (isset($_COOKIE['username']) && isset($_COOKIE['pass'])) {
                             <div class="flex-row value">
                                 <select class="input" name="visibility" id="select_visibility" required>
                                     <option value="A" selected>--Choisir une visibilité--</option>
-                                    <option value="y">Oui</option>
-                                    <option value="n">Non</option>
-                                </select>    
+                                    <option value="O">Oui</option>
+                                    <option value="N">Non</option>
+                                </select>
                             </div>
                         </div>
                     </div>

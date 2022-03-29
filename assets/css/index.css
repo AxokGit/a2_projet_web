@@ -84,6 +84,17 @@ a:hover {
   	color: #000;
 }
 
+.info_message
+{
+  display: none;
+  width: 80%;
+  text-align: center;
+  margin: 0 auto 25px auto;
+  background-color: rgb(236, 135, 135);
+  padding: 10px;
+  border-radius: 10px;
+}
+
 /*//////////////////////////////////////////////////////////////////
 [ login ]*/
 

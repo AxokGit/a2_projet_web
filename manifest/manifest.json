@@ -1,0 +1,30 @@
+{
+    "name": "Cesi Ton Stage",
+    "short_name": "CTS",
+    "description": "Cette application est une version mobile de CTS",
+    "start_url": "/",
+    "display": "standalone",
+    "orientation": "portrait",
+    "theme_color": "#3f51b5",
+    "background_color": "#3f51b5",
+    "icons": [
+        {
+            "src": "../assets/images/logo128.png",
+            "sizes": "128x128",
+            "type": "image/png",
+            "purpose": "maskable any"
+        },
+        {
+            "src": "../assets/images/logo144.png",
+            "sizes": "144x144",
+            "type": "image/png",
+            "purpose": "maskable any"
+        },
+        {
+            "src": "../assets/images/logo512.png",
+            "sizes": "512x512",
+            "type": "image/png",
+            "purpose": "maskable any"
+        }
+    ]
+}
