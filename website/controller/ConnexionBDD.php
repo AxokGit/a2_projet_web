@@ -1,7 +1,7 @@
 <?php
-$dsn = 'mysql:dbname=a2_projet_web;host=localhost:3307';               /*Chaine de connexion avec IP et BDD */
+$dsn = 'mysql:dbname=a2_projet_web;host=localhost:3306';               /*Chaine de connexion avec IP et BDD */
 $username_bdd = "root";                                                 /*Nom d'utilisateur pour MySQL */
-$password_bdd = "passwd";                                     /*Mot de passe pour MySQL*/
+$password_bdd = "";                                     /*Mot de passe pour MySQL*/
 $error = false;                                                         /*Erreur de connexion à false avant connexion*/
 
 try {                                                                   /*Tente une connexion...*/

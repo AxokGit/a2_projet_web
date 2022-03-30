@@ -96,7 +96,7 @@ if (isset($_COOKIE['username']) && isset($_COOKIE['pass'])) {
                 <?php require "controller/Top_bar.php" ?>
                 <div class="content">
                     <div class="content_title">Gestion des entreprises</div>
-                    <div class="info_message">L'entreprise a été supprimé !</div>
+                    <div class="info_message">L'entreprise a été supprimée !</div>
                     <div class="logo_plus"><i class="fas fa-plus-square logo_add"></i> <i class="fas fa-chart-bar logo_stat"></i></div>
                     <div class="table">
                         <table class="table">
