@@ -18,6 +18,7 @@ self.addEventListener('install', (e) => {
       'index.php',
       'http://ctsstatic.fr/assets/css/index.css',
       'http://ctsstatic.fr/assets/js/index.js',
+      'http://ctsstatic.fr/assets/images/logo_petit.png',
       'http://ctsstatic.fr/assets/vendors/jquery/jquery-3.6.0.min.js'
     ];
 

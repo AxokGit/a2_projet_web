@@ -1,6 +1,10 @@
 ////////////////////////////////////////////////////
 // [ Form Login ]
 (function ($) {
+    if (!window.navigator.onLine){
+        console.log("offline");
+        $(".info_message").show();
+    }
     "use strict";
     var input = $('.validate-input .input-forms');
     $('.validate').on('submit',(function(){
@@ -14,25 +18,22 @@
         }
 
         if (check){
-            if (window.navigator.onLine){
-                $.ajax({
-                type: 'POST',
-                url: 'controller/Auth.php',
-                data: {user: $(input[0]).val().trim(), pass: sha1($(input[1]).val().trim())},
-                success: function(data, status, jqXHR) {
-                    console.log(data.trim());
-                    if (data.trim() == "true"){
-                        location.href='/';
-                    } else {
-                        $("#zone-login").addClass("shaking_error");
-                        setTimeout(function() {
-                            $("#zone-login").removeClass("shaking_error");
-                        }, 1000);
-                    }
-                }});
-            } else {
-                $(".info_message").show();
-            }
+            $.ajax({
+            type: 'POST',
+            url: 'controller/Auth.php',
+            data: {user: $(input[0]).val().trim(), pass: sha1($(input[1]).val().trim())},
+            success: function(data, status, jqXHR) {
+                console.log(data.trim());
+                if (data.trim() == "true"){
+                    location.href='/';
+                } else {
+                    $("#zone-login").addClass("shaking_error");
+                    setTimeout(function() {
+                        $("#zone-login").removeClass("shaking_error");
+                    }, 1000);
+                }
+            }});
+            
         }
         check = false;
         return check;
