@@ -3,13 +3,14 @@ $(document).ready(function(){
 
     $(".logo_add").click(function() {
         $(".modal").show();
-        $(".title_modal").html("Ajout d'une entreprise");
-        $("input[type='hidden']").attr("value","add");
-        $("input[name='name']").attr("value","");
-        $("input[name='activity_sector']").attr("value","");
-        $("input[name='nb_intern_cesi']").attr("value","");
-        $("input[name='email']").attr("value","");
-
+        $(".title_modal").html("Ajout d'un stage");
+        $("input[type='hidden']").attr("value","edit");
+        $("input[name='name']").attr("value",$(this).attr("name"));
+        $("input[name='duration_internship']").attr("value",$(this).attr("duration_internship"));
+        $("input[name='remuneration_internship']").attr("value",$(this).attr("remuneration_internship"));
+        $("input[name='offer_date_internship']").attr("value",$(this).attr("offer_date_internship"));
+        $("input[name='place_number_internship']").attr("value",$(this).attr("place_number_internship"));
+        $("select[name='name_promotion'] option[value="+$(this).attr("name_promotion")+"]").prop('selected', true);
         $(".info_message").css("display", "none");
     });
 
@@ -31,30 +32,27 @@ $(document).ready(function(){
 
     $(".logo_edit").click(function() {
         $(".modal").show();
-        $(".title_modal").html("Modification d'une entreprise");
+        $(".title_modal").html("Modification d'un stage");
         $("input[type='hidden']").attr("value","edit");
         $("input[name='name']").attr("value",$(this).attr("name"));
-        $("input[name='activity_sector']").attr("value",$(this).attr("activity_sector"));
-        $("input[name='nb_intern_cesi']").attr("value",$(this).attr("nb_intern"));
-        $("input[name='email']").attr("value",$(this).attr("email"));
-
-        $("select[name='localisation'] option[value="+$(this).attr("localisation")+"]").prop('selected', true);
-        $("select[name='note'] option[value="+$(this).attr("note")+"]").prop('selected', true);
-        $("select[name='visibility'] option[value="+$(this).attr("visibility")+"]").prop('selected', true);
+        $("input[name='duration_internship']").attr("value",$(this).attr("duration_internship"));
+        $("input[name='remuneration_internship']").attr("value",$(this).attr("remuneration_internship"));
+        $("input[name='offer_date_internship']").attr("value",$(this).attr("offer_date_internship"));
+        $("input[name='place_number_internship']").attr("value",$(this).attr("place_number_internship"));
+        $("select[name='name_promotion'] option[value="+$(this).attr("name_promotion")+"]").prop('selected', true);
         $(".info_message").css("display", "none");
     });
 
-
     $(".logo_delete").click(function() {
-        console.log($(this).attr("ID_company"));
+        console.log($(this).attr("ID_intership"));
         $.post(
-            'controller/Manage_companies.php',
+            'controller/Manage_internship.php',
             {
-                ID_company: $(this).attr("ID_company"),
+                ID_internship: $(this).attr("ID_internship"),
                 action: "delete"},
             function(data, status, jqXHR) {
                 if (data.trim() == "false"){
-                    $(".info_message").html("Cette entreprise ne peut pas supprimer car il existe des stages en lien avec elle.");
+                    $(".info_message").html("Ce stage ne peut pas être supprimé car il existe des candidatures en lien avec lui.");
                     $(".info_message").css("background-color", "#df8787");
                     $(".info_message").css("display", "block");
                 } else if (data.trim() == "true")

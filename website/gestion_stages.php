@@ -18,9 +18,9 @@ if (isset($_COOKIE['username']) && isset($_COOKIE['pass'])) {
                 $query_interships->execute();
                 $results_internships = $query_interships->fetchALL(PDO::FETCH_OBJ);
 
-                $query_localisations = $bdd->prepare('SELECT ID_localisation, city_localisation FROM localisations GROUP BY city_localisation ORDER BY city_localisation ASC;');
-                $query_localisations->execute();
-                $results_localisations = $query_localisations->fetchALL(PDO::FETCH_OBJ);
+                $query_promotions = $bdd->prepare('SELECT ID_promotion, name_promotion FROM promotions GROUP BY name_promotion ORDER BY name_promotion ASC;');
+                $query_promotions->execute();
+                $results_promotions = $query_promotions->fetchALL(PDO::FETCH_OBJ);
 
 ?>
 <html lang="fr">
@@ -47,39 +47,25 @@ if (isset($_COOKIE['username']) && isset($_COOKIE['pass'])) {
                                 <div class="flex-row value"><input class="input" type="text" name="duration_internship" required></div>
                             </div>
                             <div class="flex-table">
-                                <div class="flex-row name">Email :</div>
-                                <div class="flex-row value"><input class="input" type="text" name="email" required></div>
+                                <div class="flex-row name">Rémunération :</div>
+                                <div class="flex-row value"><input class="input" type="text" name="remuneration_internship" required></div>
                             </div>
                             <div class="flex-table">
-                                <div class="flex-row name">Confiance :</div>
-                                <div class="flex-row value">
-                                    <select class="input" name="note" id="select_note" required>
-                                        <option value="A" selected>--Choisir une note--</option>
-                                        <option value="A">A</option>
-                                        <option value="B">B</option>
-                                        <option value="C">C</option>
-                                        <option value="D">D</option>
-                                    </select>    
-                                </div>
+                                <div class="flex-row name">Date de l'offre :</div>
+                                <div class="flex-row value"><input class="input" type="text" name="offer_date_internship" required></div>
                             </div>
                             <div class="flex-table">
-                                <div class="flex-row name">Localisation :</div>
+                                <div class="flex-row name">Nombre de place :</div>
+                                <div class="flex-row value"><input class="input" type="date" name="place_number_internship" required></div>
+                            </div>
+                            <div class="flex-table">
+                                <div class="flex-row name">Promotion :</div>
                                 <div class="flex-row value">
-                                    <select class="input" name="localisation" id="select_localisation" required>
-                                        <option value="" selected>--Choisir une ville--</option>
-                                        <?php foreach ($results_localisations as $result) { ?>
-                                            <option value="<?= $result->ID_localisation ?>"><?= $result->city_localisation ?></option>
+                                    <select class="input" name="name_promotion" id="select_name_promotion" required>
+                                        <option value="" selected>--Choisir une promotion--</option>
+                                        <?php foreach ($results_promotions as $result) { ?>
+                                            <option value="<?= $result->ID_promotion ?>"><?= $result->name_promotion ?></option>
                                         <?php } ?>
-                                    </select>    
-                                </div>
-                            </div>
-                            <div class="flex-table">
-                                <div class="flex-row name">Visibilité :</div>
-                                <div class="flex-row value">
-                                    <select class="input" name="visibility" id="select_visibility" required>
-                                        <option value="A" selected>--Choisir une visibilité--</option>
-                                        <option value="y">Oui</option>
-                                        <option value="n">Non</option>
                                     </select>    
                                 </div>
                             </div>
@@ -88,7 +74,6 @@ if (isset($_COOKIE['username']) && isset($_COOKIE['pass'])) {
                     </form>
                 </div>
             </div>
-
 
         <div class="container">
             <?php require "controller/Nav_bar.php" ?>
