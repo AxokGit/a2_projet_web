@@ -374,3 +374,18 @@ a:hover {
 	}
 }
 
+
+
+#firstname {
+	color: blue;
+	text-align: center;
+	width: 10px;
+}
+
+.lastname {
+	color: red;
+	margin: 10px;
+	opacity: 0.5;
+}
+
+

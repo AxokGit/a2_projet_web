@@ -7,7 +7,7 @@ if (isset($_COOKIE['username']) && isset($_COOKIE['pass'])) {
 		$query_check_cookie = $bdd->prepare('SELECT * FROM users NATURAL JOIN roles NATURAL JOIN roles_has_permissions NATURAL JOIN permissions WHERE code_permission="SFx1" AND username=:user AND password_user=:password_user;');
 		$query_check_cookie->execute(['user' => $_COOKIE['username'], 'password_user' => $_COOKIE['pass']]);
 		if ($query_check_cookie->rowCount() == 1){
-            $sql = 'SELECT companies.ID_company, name_company, activity_sector_company, nb_intern_cesi_company, email_company, visibility_company, companies_located.ID_localisation FROM companies LEFT JOIN companies_located ON companies.ID_company=companies_located.ID_company LEFT JOIN localisations ON companies_located.ID_localisation=localisations.ID_localisation;';
+            $sql = 'SELECT companies.ID_company, name_company, activity_sector_company, nb_intern_cesi_company, email_company, visibility_company, companies_located.ID_localisation, note FROM companies LEFT JOIN companies_located ON companies.ID_company=companies_located.ID_company LEFT JOIN localisations ON companies_located.ID_localisation=localisations.ID_localisation INNER JOIN evaluate ON companies.ID_company = evaluate.ID_company;';
 
             $query_perm = $bdd->prepare('SELECT username, code_permission FROM users NATURAL JOIN roles NATURAL JOIN roles_has_permissions NATURAL JOIN permissions WHERE code_permission=:perm AND username=:user;');
             $query_perm->execute(['user' => $_COOKIE["username"], 'perm' => "SFx2"]);
@@ -119,7 +119,7 @@ if (isset($_COOKIE['username']) && isset($_COOKIE['pass'])) {
                                 <td><?= $result->visibility_company ?></td>
                                 <td>
                                     <div class="actions">
-                                        <i ID_company="<?= $result->ID_company ?>" name="<?= $result->name_company ?>" activity_sector="<?= $result->activity_sector_company ?>" nb_intern="<?= $result->nb_intern_cesi_company ?>" email="<?= $result->email_company ?>" localisation="<?= $result->ID_localisation ?>" visibility="<?= $result->visibility_company ?>" class="fas fa-pen logo_edit"></i>
+                                        <i ID_company="<?= $result->ID_company ?>" name="<?= $result->name_company ?>" activity_sector="<?= $result->activity_sector_company ?>" nb_intern="<?= $result->nb_intern_cesi_company ?>" email="<?= $result->email_company ?>" localisation="<?= $result->ID_localisation ?>" note="<?= $result->note ?>" visibility="<?= $result->visibility_company ?>" class="fas fa-pen logo_edit"></i>
                                         <i ID_company="<?= $result->ID_company ?>" class="fas fa-trash-alt logo_delete"></i>
                                     </div>
                                 </td>
