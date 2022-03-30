@@ -52,11 +52,11 @@ if (isset($_COOKIE['username']) && isset($_COOKIE['pass'])) {
                             </div>
                             <div class="flex-table">
                                 <div class="flex-row name">Date de l'offre :</div>
-                                <div class="flex-row value"><input class="input" type="text" name="offer_date_internship" required></div>
+                                <div class="flex-row value"><input class="input" type="date" name="offer_date_internship" required></div>
                             </div>
                             <div class="flex-table">
                                 <div class="flex-row name">Nombre de place :</div>
-                                <div class="flex-row value"><input class="input" type="date" name="place_number_internship" required></div>
+                                <div class="flex-row value"><input class="input" type="text" name="place_number_internship" required></div>
                             </div>
                             <div class="flex-table">
                                 <div class="flex-row name">Promotion :</div>

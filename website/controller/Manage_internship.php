@@ -12,8 +12,11 @@ if (isset($_COOKIE['username']) && isset($_COOKIE['pass'])) {
 
                 if ($action == "delete"){
                     try {
-                        $query_delete_company = $bdd->prepare('SET @ID_company=:ID_company;DELETE FROM companies_located WHERE ID_company=@ID_company AND 0=(SELECT EXISTS (SELECT * FROM internships WHERE ID_company=@ID_company));DELETE FROM evaluate WHERE ID_company=@ID_company AND 0=(SELECT EXISTS (SELECT * FROM internships WHERE ID_company=@ID_company));DELETE FROM manage_company WHERE ID_company=@ID_company AND 0=(SELECT EXISTS (SELECT * FROM internships WHERE ID_company=@ID_company));DELETE FROM companies WHERE ID_company=@ID_company AND 0=(SELECT EXISTS (SELECT * FROM internships WHERE ID_company=@ID_company));');
-		                $query_delete_company->execute(['ID_internship' => $ID_intership]);
+                        $query_delete_company = $bdd->prepare('SET @ID_internship=:ID_internship;
+                        DELETE FROM internship_for_promo WHERE ID_internship=@ID_internship AND 0=(SELECT EXISTS (SELECT * FROM candidatures WHERE ID_internship=@ID_internship));
+                        DELETE FROM wishlist WHERE ID_internship=@ID_internship AND 0=(SELECT EXISTS (SELECT * FROM candidatures WHERE ID_internship=@ID_internship));
+                        DELETE FROM internships WHERE ID_internship=@ID_internship AND 0=(SELECT EXISTS (SELECT * FROM candidatures WHERE ID_internship=@ID_internship));');
+  		                $query_delete_company->execute(['ID_internship' => $ID_intership]);
                         echo "true";
                     } catch (Exception $e) {
                         echo "false";
