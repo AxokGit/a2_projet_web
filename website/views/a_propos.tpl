@@ -4,18 +4,18 @@
     <head>
         <title>{$title}</title>
         <meta name="description" content="{$description}">
-        <link rel="stylesheet" href="./assets/vendors/fontawesome/css/all.min.css">
+        <link rel="stylesheet" href="http://ctsstatic.fr/assets/vendors/fontawesome/css/all.min.css">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="icon" type="image/png" href="assets/images/logo_petit.png">
+        <link rel="icon" type="image/png" href="http://ctsstatic.fr/assets/images/logo_petit.png">
         <meta charset="UTF-8">
-        <link rel="stylesheet" type="text/css" href="assets/css/a_propos.css">
+        <link rel="stylesheet" type="text/css" href="http://ctsstatic.fr/assets/css/a_propos.css">
     </head>
     <body>
         <div class="container">
             <div class="main">
                 <div class="content">
                     <div class="bubble">
-                        <img src="assets/images/fond_cesi_large.png" alt="fond cesi">
+                        <img src="http://ctsstatic.fr/assets/images/fond_cesi_large.png" alt="fond cesi">
                         <div class="centered">{$page_title}</div>
                     </div>
                     {foreach from=$bubbles key=$key item=$bubble}

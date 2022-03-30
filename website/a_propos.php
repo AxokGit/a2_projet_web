@@ -1,6 +1,6 @@
 <?php
 
-include_once("./assets/vendors/smarty/libs/Smarty.class.php");
+include_once("controller/smarty/libs/Smarty.class.php");
 
 if (isset($_COOKIE['username']) && isset($_COOKIE['pass'])) {
     require "controller/ConnexionBDD.php";
