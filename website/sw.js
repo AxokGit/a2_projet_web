@@ -16,9 +16,9 @@ self.addEventListener('install', (e) => {
     var cacheName = 'CTS_v2';
     var appShellFiles = [
       'index.php',
-      'assets/css/index.css',
-      'assets/js/index.js',
-      'assets/vendors/jquery/jquery-3.6.0.min.js'
+      'http://ctsstatic.fr/assets/css/index.css',
+      'http://ctsstatic.fr/assets/js/index.js',
+      'http://ctsstatic.fr/assets/vendors/jquery/jquery-3.6.0.min.js'
     ];
 
     e.waitUntil(
