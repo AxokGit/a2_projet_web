@@ -8,31 +8,30 @@ if (isset($_COOKIE['username']) && isset($_COOKIE['pass'])) {
 		if ($query_check_cookie->rowCount() == 1){
             if (isset($_POST["ID_internship"]) && isset($_POST["action"])){
                 $ID_intership = $_POST["ID_internship"];
-                $action = $_POST["action"];
 
-                if ($action == "delete"){
+                if ($_POST["action"] == "delete"){
                     try {
-                        $query_delete_company = $bdd->prepare('SET @ID_internship=:ID_internship;
+                        $query_delete_internship = $bdd->prepare('SET @ID_internship=:ID_internship;
                         DELETE FROM internship_for_promo WHERE ID_internship=@ID_internship AND 0=(SELECT EXISTS (SELECT * FROM candidatures WHERE ID_internship=@ID_internship));
                         DELETE FROM wishlist WHERE ID_internship=@ID_internship AND 0=(SELECT EXISTS (SELECT * FROM candidatures WHERE ID_internship=@ID_internship));
                         DELETE FROM internships WHERE ID_internship=@ID_internship AND 0=(SELECT EXISTS (SELECT * FROM candidatures WHERE ID_internship=@ID_internship));');
-  		                $query_delete_company->execute(['ID_internship' => $ID_intership]);
+  		                $query_delete_internship->execute(['ID_internship' => $ID_intership]);
                         echo "true";
                     } catch (Exception $e) {
                         echo "false";
                     }
                 }
-            } else if (isset($_POST["action"]) && isset($_POST["name"]) && isset($_POST["activity_sector"]) && isset($_POST["nb_intern_cesi"]) && isset($_POST["email"]) && isset($_POST["note"]) && isset($_POST["localisation"]) && isset($_POST["visibility"])) {
+            } else if (isset($_POST["action"]) && isset($_POST["name"]) && isset($_POST["duration_internship"]) && isset($_POST["remuneration_internship"]) && isset($_POST["offer_date_internship"]) && isset($_POST["place_number_internship"]) && isset($_POST["name_promotion"])) {
                 if ($_POST["action"] == "add"){
                     try {
-                        $query_add_company = $bdd->prepare('INSERT INTO companies VALUES (NULL, :name, :activity_sector, :nb_intern_CESI, :visibility, :email);');
-                        $query_add_company->execute(['name' => $_POST["name"], 'activity_sector' => $_POST["activity_sector"], 'nb_intern_CESI' => $_POST["nb_intern_cesi"], 'visibility' => $_POST["visibility"], 'email' => $_POST["email"]]);
-                        $query_add_company = $bdd->prepare('SELECT LAST_INSERT_ID() as "ID_company";');
-                        $query_add_company->execute();
-                        $ID_add_company = $query_add_company->fetchALL(PDO::FETCH_OBJ)[0]->ID_company;
-                        $query_add_company = $bdd->prepare('INSERT INTO companies_located VALUES (:ID_localisation, :ID_company);');
-                        $query_add_company->execute(['ID_localisation' => $_POST["localisation"], 'ID_company' => $ID_add_company]);
-                        echo "<script>location.href='/gestion_entreprises.php';</script>";
+                        $query_add_internship = $bdd->prepare('INSERT INTO internships VALUES (NULL, :name, :duration_internship, :remuneration_internship, :offer_date_internship, :place_number_internship);');
+                        $query_add_internship->execute(['name' => $_POST["name"], 'duration_internship' => $_POST["duration_internship"], 'remuneration_internship' => $_POST["remuneration_internship"], 'offer_date_internship' => $_POST["offer_date_internship"], 'place_number_internship' => $_POST["place_number_internship"]]);
+                        $query_add_internship = $bdd->prepare('SELECT LAST_INSERT_ID() as "ID_internship";');
+                        $query_add_internship->execute();
+                        $ID_add_internship = $query_add_internship->fetchALL(PDO::FETCH_OBJ)[0]->ID_internship;
+                        $query_add_internship = $bdd->prepare('INSERT INTO internship_for_promo VALUES (:ID_promotion, :ID_internship);');
+                        $query_add_internship->execute(['ID_promotion' => $_POST["name_promotion"], 'ID_internship' => $ID_add_internship]);
+                        echo "<script>location.href='/gestion_stages.php';</script>";
                     } catch (Exception $e) {
                         echo "false";
                     }
