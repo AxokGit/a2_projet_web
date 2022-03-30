@@ -13,7 +13,7 @@ if (isset($_COOKIE['username']) && isset($_COOKIE['pass'])) {
         <?php require "controller/Head.php" ?>
         <title>Accueil - CTS</title>
         <meta name="description" content="Page d'accueil de CTS">
-        <link rel="stylesheet" type="text/css" href="assets/css/accueil.css">
+        <link rel="stylesheet" type="text/css" href="http://ctsstatic.fr/assets/css/accueil.css">
     </head>
     <body>
         <div class="container">
@@ -22,7 +22,7 @@ if (isset($_COOKIE['username']) && isset($_COOKIE['pass'])) {
                 <?php require "controller/Top_bar.php" ?>
                 <div class="content">
                     <div class="bubble">
-                        <img src="assets/images/fond_cesi_large.png" alt="fond cesi">
+                        <img src="http://ctsstatic.fr/assets/images/fond_cesi_large.png" alt="fond cesi">
                         <div class="centered">CTS vous conduit vers la réussite</div>
                     </div>
                     <div class="bubble">
@@ -46,10 +46,10 @@ if (isset($_COOKIE['username']) && isset($_COOKIE['pass'])) {
             </div>
         </div>
         <?php require "controller/Script.php" ?>
-        <script src="assets/js/accueil.js"></script>
+        <script src="http://ctsstatic.fr/assets/js/accueil.js"></script>
     </body>
 </html>
-<?php 
+<?php
         } else {
             echo "<script>location.href='/';</script>";
         }

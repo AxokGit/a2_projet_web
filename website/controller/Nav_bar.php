@@ -70,7 +70,7 @@ if (isset($_COOKIE['username']) && isset($_COOKIE['pass'])) {
     <ul>
         <li class="nav_title">
             <a href="#">
-                <img src="assets/images/logo_petit.png" alt="Cesi Ton Stage">
+                <img src="http://ctsstatic.fr/assets/images/logo_petit.png" alt="Cesi Ton Stage">
                 <span class="title">Cesi Ton Stage</span>
             </a>
         </li>

@@ -16,7 +16,7 @@ if (isset($_COOKIE['username']) && isset($_COOKIE['pass'])) {
     <head>
         <?php require "controller/Head.php" ?>
         <title>Paramètres - CTS</title>
-        <link rel="stylesheet" type="text/css" href="assets/css/parameters.css">
+        <link rel="stylesheet" type="text/css" href="http://ctsstatic.fr/assets/css/parameters.css">
     </head>
     <body>
 
@@ -122,7 +122,7 @@ if (isset($_COOKIE['username']) && isset($_COOKIE['pass'])) {
             </div>
         </div>
         <?php require "controller/Script.php" ?>
-        <script src="assets/js/parameters.js"></script>
+        <script src="http://ctsstatic.fr/assets/js/parameters.js"></script>
     </body>
 </html>
 <?php 

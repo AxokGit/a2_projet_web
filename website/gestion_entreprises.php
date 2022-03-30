@@ -24,7 +24,7 @@ if (isset($_COOKIE['username']) && isset($_COOKIE['pass'])) {
     <head>
         <?php require "controller/Head.php" ?>
         <title>Entreprises - Gestion - CTS</title>
-        <link rel="stylesheet" type="text/css" href="assets/css/gestion_entreprises.css">
+        <link rel="stylesheet" type="text/css" href="http://ctsstatic.fr/assets/css/gestion_entreprises.css">
     </head>
     <body>
         <div id="modal_add_edit" class="modal">
@@ -131,7 +131,7 @@ if (isset($_COOKIE['username']) && isset($_COOKIE['pass'])) {
             </div>
         </div>
         <?php require "controller/Script.php" ?>
-        <script src="assets/js/gestion_entreprises.js"></script>
+        <script src="http://ctsstatic.fr/assets/js/gestion_entreprises.js"></script>
     </body>
 </html>
 <?php

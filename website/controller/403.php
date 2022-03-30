@@ -3,7 +3,7 @@
     <head>
         <?php require "Head.php" ?>
         <title>Accès refusé - CTS</title>
-        <link rel="stylesheet" type="text/css" href="assets/css/403.css">
+        <link rel="stylesheet" type="text/css" href="http://ctsstatic.fr/assets/css/403.css">
     </head>
     <body>
         <div class="container">
@@ -21,6 +21,6 @@
             </div>
         </div>
         <?php require "Script.php" ?>
-        <script src="assets/js/403.js"></script>
+        <script src="http://ctsstatic.fr/assets/js/403.js"></script>
     </body>
 </html>

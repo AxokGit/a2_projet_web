@@ -12,7 +12,7 @@ if (isset($_COOKIE['username']) && isset($_COOKIE['pass'])) {
     <head>
         <?php require "controller/Head.php" ?>
         <title>Delegues - Gestion - CTS</title>
-        <link rel="stylesheet" type="text/css" href="assets/css/gestion_delegates.css">
+        <link rel="stylesheet" type="text/css" href="http://ctsstatic.fr/assets/css/gestion_delegates.css">
     </head>
     <body>
         <div class="container">
@@ -25,7 +25,7 @@ if (isset($_COOKIE['username']) && isset($_COOKIE['pass'])) {
             </div>
         </div>
         <?php require "controller/Script.php" ?>
-        <script src="assets/js/gestion_delegates.js"></script>
+        <script src="http://ctsstatic.fr/assets/js/gestion_delegates.js"></script>
     </body>
 </html>
 <?php
