@@ -29,13 +29,14 @@ $(document).ready(function(){
     }
 
     $('.form_add_edit').on('submit',(function(){
-        $(".form_postuler").append('<input type="hidden" name="ID_internship" value="'+ window.ID_internship +'">');
+        $(".form_add_edit").append('<input type="hidden" name="ID_internship" value="'+ window.ID_internship +'">');
         return true;
     }));
 
 
     $(".logo_edit").click(function() {
-        $(".modal").show();
+        $("#modal_add_edit").show();
+        window.ID_internship = $(this).attr("ID_internship");
         $(".title_modal").html("Modification d'un stage");
         $("input[type='hidden']").attr("value","edit");
         $("input[name='name_internship']").attr("value",$(this).attr("name_internship"));

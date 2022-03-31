@@ -36,9 +36,25 @@ if (isset($_COOKIE['username']) && isset($_COOKIE['pass'])) {
                         echo "<script>location.href='/gestion_stages.php';</script>";
                     } catch (Exception $e) {
                         echo "false";
-                        echo $_POST['name_promotion'];
-                        echo $ID_add_internship;
                     }
+                }
+            }
+            if (isset($_POST["action"]) && isset($_POST["name_internship"]) && isset($_POST["description_internship"]) && isset($_POST["duration_internship"]) && isset($_POST["remuneration_internship"]) && isset($_POST["offer_date_internship"]) && isset($_POST["place_number_internship"]) && isset($_POST["competences_internship"]) && isset($_POST["name_promotion"]) && isset($_POST["localisation"]) && isset($_POST["company"])) {
+                if ($_POST["action"] == "edit"){
+                    try {
+                        $ID_internship = $_POST["ID_internship"];
+                        $query_edit_internship = $bdd->prepare('UPDATE internship_for_promo SET ID_internship = :ID_internship WHERE ID_promotion = :name_promotion;');
+                        $query_edit_internship->execute(['name_promotion' => $_POST['name_promotion'], 'ID_internship' => $ID_internship]);
+                        
+                        $query_edit_internship = $bdd->prepare('UPDATE internships SET name_internship = :name_internship, description_internship = :description_internship, duration_internship = :duration_internship, remuneration_internship = :remuneration_internship, offer_date_internship = :offer_date_internship, place_number_internship = :place_number_internship, competences_internship = :competences_internship, name_promotion = :name_promotion, localisation = :localisation, company = :company WHERE ID_internship=:ID_internship;');
+                        $query_edit_internship->execute(['name_internship' => $_POST["name_internship"], 'description_internship' => $_POST["description_internship"], 'duration_internship' => $_POST["duration_internship"], 'remuneration_internship' => $_POST["remuneration_internship"], 'offer_date_internship' => $_POST["offer_date_internship"], 'place_number_internship' => $_POST["place_number_internship"], 'competences_internship' => $_POST["competences_internship"], 'name_promotion' => $_POST["name_promotion"], 'localisation' => $_POST["localisation"], 'company' => $_POST["company"]]);
+                        
+                        echo "<script>location.href='/gestion_stages.php';</script>";
+                    } catch (Exception $e) {
+                        echo $e;
+                    }
+                } else {
+                    echo "error";
                 }
             }
         }
