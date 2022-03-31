@@ -8,6 +8,7 @@ if (isset($_COOKIE['username']) && isset($_COOKIE['pass'])) {
 		if ($query_check_cookie->rowCount() == 1){
             if (isset($_POST["ID_company"]) && isset($_POST["action"])){
                 $ID_company = $_POST["ID_company"];
+                echo $ID_company;
 
                 if ($_POST["action"] == "delete"){
                     try {
@@ -18,7 +19,11 @@ if (isset($_COOKIE['username']) && isset($_COOKIE['pass'])) {
                         echo "false";
                     }
                 }
-            } else if (isset($_POST["action"]) && isset($_POST["name"]) && isset($_POST["activity_sector"]) && isset($_POST["nb_intern_cesi"]) && isset($_POST["email"]) && isset($_POST["note"]) && isset($_POST["localisation"]) && isset($_POST["visibility"])) {
+
+                
+
+            }
+            if (isset($_POST["action"]) && isset($_POST["name"]) && isset($_POST["activity_sector"]) && isset($_POST["nb_intern_cesi"]) && isset($_POST["email"]) && isset($_POST["note"]) && isset($_POST["localisation"]) && isset($_POST["visibility"])) {
                 if ($_POST["action"] == "add"){
                     try {
                         $query_add_company = $bdd->prepare('INSERT INTO companies VALUES (NULL, :name, :activity_sector, :nb_intern_CESI, :visibility, :email);');
@@ -41,30 +46,30 @@ if (isset($_COOKIE['username']) && isset($_COOKIE['pass'])) {
                         echo $_COOKIE['username'];
                         echo $ID_add_company;
                     }
-                }
+                }}
 
-                else if ($_POST["action"] == "edit"){
+            if (isset($_POST["action"]) && isset($_POST["name"]) && isset($_POST["activity_sector"]) && isset($_POST["nb_intern_cesi"]) && isset($_POST["email"]) && isset($_POST["note"]) && isset($_POST["localisation"]) && isset($_POST["visibility"]) && $_POST["action"] == "edit"){
                     try {
-                        $query_edit_company = $bdd->prepare('SET @ID_company=:ID_company;UPDATE companies SET name_company = :name, activity_sector_company = :sector, nb_intern_cesi_company = :nb_intern, visibility_company = :visibility, email_company = :email WHERE ID_company=@ID_company;');
-                        $query_edit_company->execute(['name'=> $_POST['name'], 'sector' => $_POST['activity_sector'], 'nb_intern' => $_POST['nb_intern_cesi'], 'visibility' => $_POST['select_visibility'], 'email' => $_POST['email'], 'ID_company' => $ID_company]);
-                        $query_edit_company = $bdd->prepare('SET @ID_company=:ID_company;UPDATE companies_located SET ID_localisation = :localisation WHERE ID_company = @ID_company;');
-                        $query_edit_company->execute(['localisation' => $_POST['localisation'], 'ID_company' => $ID_company]);
-                        $query_edit_company = $bdd->prepare('SET @ID_company=:ID_company;UPDATE evaluate SET note = :note WHERE ID_company = @ID_company;');
+                        //$ID_company = $_POST["ID_company"];
+                        $query_edit_company = $bdd->prepare('UPDATE evaluate SET note = :note WHERE ID_company = :ID_company;');
                         $query_edit_company->execute(['note' => $_POST['note'], 'ID_company' => $ID_company]);
-
-
+                        
+                        $query_edit_company = $bdd->prepare('UPDATE companies_located SET ID_localisation = :localisation WHERE ID_company = :ID_company;');
+                        $query_edit_company->execute(['localisation' => $_POST['localisation'], 'ID_company' => $ID_company]);
+                        
+                        $query_edit_company = $bdd->prepare('UPDATE companies SET name_company = :name, activity_sector_company = :sector, nb_intern_cesi_company = :nb_intern, visibility_company = :visibility, email_company = :email WHERE ID_company=:ID_company;');
+                        $query_edit_company->execute(['name'=> $_POST['name'], 'sector' => $_POST['activity_sector'], 'nb_intern' => $_POST['nb_intern_cesi'], 'visibility' => $_POST['visibility'], 'email' => $_POST['email'], 'ID_company' => $ID_company]);
+                        
+                        //$query_edit_company->fetchALL(PDO::FETCH_OBJ);
                         echo "<script>location.href='/gestion_entreprises.php';</script>";
-                        /*
-                        UPDATE companies SET name_company = 'Test1', activity_sector_company = 'Qqch de très spécial', nb_intern_cesi_company = 69, visibility_company = 'N', email_company = 'test1@lihoco.fr' WHERE ID_company = 5;
-                        UPDATE companies_located SET ID_localisation = 1 WHERE ID_company = 5;
-                        UPDATE evaluate SET note = 'A' WHERE ID_company = 5;
-                        */
+                        
                     } catch (Exception $e) {
                         echo "false";
-                    }
+                        }
                 
-                }
-            }
+                } else {echo "false";}
+                
+            
         }
     }
 }
