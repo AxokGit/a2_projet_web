@@ -85,7 +85,7 @@ if (isset($_COOKIE['username']) && isset($_COOKIE['pass'])) {
                             </div>
                         </div>
                     </div>
-                    <button type="submit">Ajouter</button>
+                    <button id="button_add_edit" type="submit">Ajouter</button>
                 </form>
             </div>
         </div>
