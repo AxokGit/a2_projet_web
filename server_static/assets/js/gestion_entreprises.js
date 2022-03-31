@@ -34,6 +34,7 @@ $(document).ready(function(){
 
     $(".logo_edit").click(function() {
         $(".modal").show();
+        window.ID_company = $(this).attr("ID_company");
         $(".title_modal").html("Modification d'une entreprise");
         $("input[type='hidden']").attr("value","edit");
         $("input[name='name']").attr("value",$(this).attr("name"));
