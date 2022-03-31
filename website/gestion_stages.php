@@ -66,7 +66,7 @@ if (isset($_COOKIE['username']) && isset($_COOKIE['pass'])) {
                                         <?php foreach ($results_promotions as $result) { ?>
                                             <option value="<?= $result->ID_promotion ?>"><?= $result->name_promotion ?></option>
                                         <?php } ?>
-                                    </select>    
+                                    </select>
                                 </div>
                             </div>
                         </div>
