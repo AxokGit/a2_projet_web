@@ -14,13 +14,21 @@ if (isset($_COOKIE['username']) && isset($_COOKIE['pass'])) {
             $query_perm = $bdd->prepare('SELECT username, code_permission FROM users NATURAL JOIN roles NATURAL JOIN roles_has_permissions NATURAL JOIN permissions WHERE code_permission=:perm AND username=:user;');
             $query_perm->execute(['user' => $_COOKIE["username"], 'perm' => "SFx2"]);
             if ($query_perm->rowCount() == 1) {
-                $query_interships = $bdd->prepare($sql);
-                $query_interships->execute();
-                $results_internships = $query_interships->fetchALL(PDO::FETCH_OBJ);
+                $query_internships = $bdd->prepare($sql);
+                $query_internships->execute();
+                $results_internships = $query_internships->fetchALL(PDO::FETCH_OBJ);
 
                 $query_promotions = $bdd->prepare('SELECT ID_promotion, name_promotion FROM promotions GROUP BY name_promotion ORDER BY name_promotion ASC;');
                 $query_promotions->execute();
                 $results_promotions = $query_promotions->fetchALL(PDO::FETCH_OBJ);
+
+                $query_localisations = $bdd->prepare('SELECT ID_localisation, city_localisation FROM localisations GROUP BY city_localisation ORDER BY city_localisation ASC;');
+                $query_localisations->execute();
+                $results_localisations = $query_localisations->fetchALL(PDO::FETCH_OBJ);
+
+                $query_company = $bdd->prepare('SELECT ID_company, name_company FROM companies GROUP BY name_company ORDER BY name_company ASC;');
+                $query_company->execute();
+                $results_company = $query_company->fetchALL(PDO::FETCH_OBJ);
 
 ?>
 <html lang="fr">
@@ -43,6 +51,10 @@ if (isset($_COOKIE['username']) && isset($_COOKIE['pass'])) {
                                 <div class="flex-row value"><input class="input" type="text" name="name_internship" required></div>
                             </div>
                             <div class="flex-table">
+                                <div class="flex-row name">Description du stage :</div>
+                                <div class="flex-row value"><input class="input" type="text" name="description_internship" required></div>
+                            </div>
+                            <div class="flex-table">
                                 <div class="flex-row name">Durée du stage :</div>
                                 <div class="flex-row value"><input class="input" type="text" name="duration_internship" required></div>
                             </div>
@@ -59,6 +71,10 @@ if (isset($_COOKIE['username']) && isset($_COOKIE['pass'])) {
                                 <div class="flex-row value"><input class="input" type="text" name="place_number_internship" required></div>
                             </div>
                             <div class="flex-table">
+                                <div class="flex-row name">Compétences :</div>
+                                <div class="flex-row value"><input class="input" type="text" name="competences_internship" required></div>
+                            </div>
+                            <div class="flex-table">
                                 <div class="flex-row name">Promotion :</div>
                                 <div class="flex-row value">
                                     <select class="input" name="name_promotion" id="select_name_promotion" required>
@@ -69,6 +85,28 @@ if (isset($_COOKIE['username']) && isset($_COOKIE['pass'])) {
                                     </select>
                                 </div>
                             </div>
+                        <div class="flex-table">
+                            <div class="flex-row name">Localisation :</div>
+                            <div class="flex-row value">
+                                <select class="input" name="localisation" id="select_localisation" required>
+                                    <option value="">--Choisir une ville--</option>
+                                    <?php foreach ($results_localisations as $result) { ?>
+                                        <option value="<?= $result->ID_localisation ?>"><?= $result->city_localisation ?></option>
+                                    <?php } ?>
+                                </select>    
+                            </div>
+                        </div>
+                        <div class="flex-table">
+                            <div class="flex-row name">Entreprise :</div>
+                            <div class="flex-row value">
+                                <select class="input" name="company" id="select_company" required>
+                                    <option value="">--Choisir une entrprise--</option>
+                                    <?php foreach ($results_company as $result) { ?>
+                                        <option value="<?= $result->ID_company ?>"><?= $result->name_company ?></option>
+                                    <?php } ?>
+                                </select>    
+                            </div>
+                        </div>
                         </div>
                         <button type="submit">Ajouter</button>
                     </form>
