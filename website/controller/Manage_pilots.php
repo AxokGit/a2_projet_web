@@ -11,13 +11,12 @@ if (isset($_COOKIE['username']) && isset($_COOKIE['pass'])) {
 
                 if ($_POST["action"] == "delete"){
                     try {
-                        $query_delete_pilots = $bdd->prepare('SET @ID_user=:ID_user WHERE name_role="pilot";DELETE FROM users WHERE users.ID_user =:ID_user;');
-
-                        /*DELETE FROM manage_company WHERE ID_user=@ID_user AND 0=(SELECT EXISTS ( SELECT * FROM user_belong_promo WHERE ID_user=@ID_user));
-                        DELETE FROM evaluate WHERE ID_user=@ID_user AND 0=(SELECT EXISTS ( SELECT * FROM user_belong_promo WHERE ID_user=@ID_user));
-                        DELETE FROM wishlist WHERE ID_user=@ID_user AND 0=(SELECT EXISTS ( SELECT * FROM user_belong_promo WHERE ID_user=@ID_user));
-                        DELETE FROM candidatures WHERE ID_user=@ID_user AND 0=(SELECT EXISTS ( SELECT * FROM user_belong_promo WHERE ID_user=@ID_user));
-                    DELETE FROM users WHERE ID_user=@ID_user AND 0=(SELECT EXISTS ( SELECT * FROM user_belong_promo WHERE ID_user=@ID_user));');*/
+                        $query_delete_pilots = $bdd->prepare('SET @ID_user=:ID_user WHERE name_role="pilot";
+                        DELETE FROM manage_company WHERE ID_user=@ID_user AND 0=(SELECT EXISTS ( SELECT * FROM candidatures WHERE ID_user=@ID_user));
+                        DELETE FROM evaluate WHERE ID_user=@ID_user AND 0=(SELECT EXISTS ( SELECT * FROM candidatures WHERE ID_user=@ID_user));
+                        DELETE FROM wishlist WHERE ID_user=@ID_user AND 0=(SELECT EXISTS ( SELECT * FROM candidatures WHERE ID_user=@ID_user));
+                        DELETE FROM user_belong_promo WHERE ID_user=@ID_user AND 0=(SELECT EXISTS ( SELECT * FROM candidatures WHERE ID_user=@ID_user));
+                        DELETE FROM users WHERE ID_user=@ID_user AND 0=(SELECT EXISTS ( SELECT * FROM candidatures WHERE ID_user=@ID_user));');
 		                $query_delete_pilots->execute(['ID_user' => $ID_user]);
                         echo "true";
                     } catch (Exception $e) {
