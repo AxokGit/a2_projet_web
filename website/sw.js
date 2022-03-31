@@ -1,59 +1,63 @@
-importScripts(
-    'https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js'
-);
-if (workbox) {
-    console.log(`Super ! Workbox est chargé 🎉`);
-  
-    workbox.routing.registerRoute(
-        /\.(?:html|js|css|png|jpg|jpeg|svg|gif)$/,
-        new workbox.strategies.StaleWhileRevalidate()
-    );
-}
+const staticCacheName = "site_static_v1";
+const dynamicCacheName = "site_dynamic_v1";
+const assets = [
+    './',
+    './index.php',
+    './fallback.php',
+    './manifest/manifest.json',
+    'http://ctsstatic.fr/assets/css/index.css',
+    'http://ctsstatic.fr/assets/css/a_propos.css',
+    'http://ctsstatic.fr/assets/images/fond_cesi_large.png',
+    'http://ctsstatic.fr/assets/vendors/fontawesome/css/all.min.css',
+    'http://ctsstatic.fr/assets/js/index.js',
+    'http://ctsstatic.fr/assets/js/nav_bar.js',
+    'http://ctsstatic.fr/assets/css/nav_bar.css',
+    'http://ctsstatic.fr/assets/images/logo.png',
+    'http://ctsstatic.fr/assets/images/logo144.png',
+    'http://ctsstatic.fr/assets/images/logo_petit.png',
+    'http://ctsstatic.fr/assets/vendors/jquery/jquery-3.6.0.min.js',
+    'http://ctsstatic.fr/assets/js/sha1.min.js',
+    'http://ctsstatic.fr/assets/fonts/Fredoka-Regular.ttf',
+];
 
-//Installation du service worker
-self.addEventListener('install', (e) => {
-    console.log('[Service Worker] Installation');
-    var cacheName = 'CTS_v2';
-    var appShellFiles = [
-      'index.php',
-      'http://ctsstatic.fr/assets/css/index.css',
-      'http://ctsstatic.fr/assets/js/index.js',
-      'http://ctsstatic.fr/assets/images/logo_petit.png',
-      'http://ctsstatic.fr/assets/vendors/jquery/jquery-3.6.0.min.js'
-    ];
-
-    e.waitUntil(
-        caches.open(cacheName).then((cache) => {
-            console.log('[Service Worker] Mise en cache globale: app shell et contenu')
-            return cache.addAll(appShellFiles);
-    }))
+self.addEventListener('install', evt => { //Event à l'installation
+    //console.log("installed");
+    evt.waitUntil( //Ne s'arrete pas tant que le cache n'est complet
+        caches.open(staticCacheName).then(cache => {
+            console.log("Caching assets"); 
+            cache.addAll(assets);
+        })
+    )
 });
 
-//fetch event afin de répondre quand on est en mode hors ligne.
-self.addEventListener('fetch', (e) => {
-    e.respondWith(
-        caches.open('ma_sauvegarde').then(function(cache) {
-            return cache.match(e.request).then(function (response) {
-                return response || fetch(e.request).then(function(response) {
-                    cache.put(e.request, response.clone());
-                    return response;
-                });
-            });
+self.addEventListener('activate', evt => {
+    //console.log("activated");
+    evt.waitUntil(
+        caches.keys().then(keys => {
+            //console.log(keys);
+            return Promise.all(keys
+                .filter(key => key !== staticCacheName && key !== dynamicCacheName)
+                .map(key => caches.delete(key)))
         })
     );
 });
-/*
-self.addEventListener('fetch', (e) => {
-    e.respondWith(
-      caches.match(e.request).then((r) => {
-            console.log('[Service Worker] Récupération de la ressource: '+e.request.url);
-        return r || fetch(e.request).then((response) => {
-                  return caches.open(cacheName).then((cache) => {
-            console.log('[Service Worker] Mise en cache de la nouvelle ressource: '+e.request.url);
-            cache.put(e.request, response.clone());
-            return response;
-          });
-        });
-      })
+
+/*self.addEventListener('fetch', evt => {
+    evt.respondWith(
+        caches.match(evt.request).then(cacheRes => {
+            console.log(evt.request);
+            return cacheRes || fetch(evt.request).then(fetchRes => {
+                return caches.open(dynamicCacheName).then(cache => {
+                    if (evt.request.url.indexOf('favoris') > -1){
+                        cache.put(evt.request.url, fetchRes.clone());
+                    }
+                    return fetchRes;
+                })
+            });
+        }).catch(() => {
+            console.log("Erreur d'accès à :", evt.request.url)
+            return caches.match('/fallback.php');
+        })
     );
-  });*/
+});
+*/

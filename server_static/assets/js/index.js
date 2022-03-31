@@ -4,6 +4,7 @@
     if (!window.navigator.onLine){
         console.log("offline");
         $(".info_message").show();
+        $(".info_message").show();
     }
     "use strict";
     var input = $('.validate-input .input-forms');
@@ -25,7 +26,7 @@
             success: function(data, status, jqXHR) {
                 console.log(data.trim());
                 if (data.trim() == "true"){
-                    location.href='/';
+                    location.href='/accueil.php';
                 } else {
                     $("#zone-login").addClass("shaking_error");
                     setTimeout(function() {
@@ -79,11 +80,29 @@ $('.hidden').delay(300).fadeIn(400);
 if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
       navigator.serviceWorker.register('sw.js')
-        .then(registration => {
-          console.log(`Service Worker enregistré ! Ressource: ${registration.scope}`);
-        })  
-        .catch(err => {
-          console.log(`Echec de l'enregistrement du Service Worker: ${err}`);
-        });
+        .then(registration => {console.log(`[SW] enregistré ! ${registration.scope}`);})  
+        .catch(err => {console.log(`[SW] Echec de l'enregistrement: ${err}`);});
     });
 }
+
+
+/*
+function getCookie(user) {
+    var cookieArr = document.cookie.split(";");
+    for (var i = 0; i < cookieArr.length; i++) {
+        var cookiePair = cookieArr[i].split("=");
+        if (user == cookiePair[0].trim()) {
+            return decodeURIComponent(cookiePair[1]);
+        }
+    }
+    return null;
+}
+
+function checkCookie() {
+    var username = getCookie("username");
+    var pass = getCookie("pass");
+    if (!(username != "" && username != null && pass != null && pass != null)) {
+        console.log("no cookie");
+    }
+}
+checkCookie();*/

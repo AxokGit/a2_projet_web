@@ -28,6 +28,8 @@ if (isset($_COOKIE['username']) && isset($_COOKIE['pass'])) {
                         $ID_add_company = $query_add_company->fetchALL(PDO::FETCH_OBJ)[0]->ID_company;
                         $query_add_company = $bdd->prepare('INSERT INTO companies_located VALUES (:ID_localisation, :ID_company);');
                         $query_add_company->execute(['ID_localisation' => $_POST["localisation"], 'ID_company' => $ID_add_company]);
+                        $query_add_company = $bdd->prepare('INSERT INTO companies_located VALUES (:ID_localisation, :ID_company);');
+                        $query_add_company->execute(['ID_localisation' => $_POST["localisation"], 'ID_company' => $ID_add_company]);
                         echo "<script>location.href='/gestion_entreprises.php';</script>";
                     } catch (Exception $e) {
                         echo "false";
