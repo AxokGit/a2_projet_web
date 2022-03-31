@@ -19,6 +19,10 @@ if (isset($_COOKIE['username']) && isset($_COOKIE['pass'])) {
                 $query_localisations = $bdd->prepare('SELECT ID_localisation, city_localisation FROM localisations GROUP BY city_localisation ORDER BY city_localisation ASC;');
                 $query_localisations->execute();
                 $results_localisations = $query_localisations->fetchALL(PDO::FETCH_OBJ);
+
+                $query_companies_top_internship = $bdd->prepare('SELECT companies.ID_company, name_company, COUNT(internships.ID_company) AS "number_of_internships" FROM companies NATURAL JOIN companies_located NATURAL JOIN localisations LEFT JOIN internships ON companies.ID_company=internships.ID_company INNER JOIN evaluate ON companies.ID_company=evaluate.ID_company INNER JOIN users ON evaluate.ID_user=users.ID_user NATURAL JOIN roles WHERE name_role="Pilote"  GROUP BY internships.ID_company ORDER BY number_of_internships DESC;');
+                $query_companies_top_internship->execute();
+                $results_companies_top_internship = $query_companies_top_internship->fetchALL(PDO::FETCH_OBJ);
 ?>
 <html lang="fr">
     <head>
@@ -93,7 +97,27 @@ if (isset($_COOKIE['username']) && isset($_COOKIE['pass'])) {
         <div id="modal_stat" class="modal">
             <div class="modal-content">
                 <span class="close" id="close_stat">&times;</span>
-                <div class="title_modal">oui</div>
+                <div class="title_modal">Top des entreprises ayant le plus de stages</div>
+                <div class="modal_stat_table">
+                    <table class="table">
+                        <tr>
+                            <td>ID</td>
+                            <td>Nom</td>
+                            <td>Nb stages</td>
+                        </tr>
+                        <?php foreach ($results_companies_top_internship as $result) { ?>
+                        <tr>
+                            <td><?= $result->ID_company ?></td>
+                            <td><?= $result->name_company ?></td>
+                            <td><?= $result->number_of_internships ?></td>
+                            
+                        </tr>
+                        <?php } ?>
+                    </table>
+                </div>
+                
+                
+                
             </div>
         </div>
 

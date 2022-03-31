@@ -53,6 +53,13 @@ table td {
     border: solid 1px black;
 }
 
+.modal_stat_table
+{
+  margin: 0 auto;
+  padding-bottom: 10px;
+  text-align: center;
+}
+
 /*//////////////////////////////////////////////////////////////////
 [ Modal ] */
 
