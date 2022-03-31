@@ -7,9 +7,9 @@ if (isset($_COOKIE['username']) && isset($_COOKIE['pass'])) {
 		$query_check_cookie = $bdd->prepare('SELECT * FROM users NATURAL JOIN roles NATURAL JOIN roles_has_permissions NATURAL JOIN permissions WHERE code_permission="SFx1" AND username=:user AND password_user=:password_user;');
 		$query_check_cookie->execute(['user' => $_COOKIE['username'], 'password_user' => $_COOKIE['pass']]);
 		if ($query_check_cookie->rowCount() == 1){
-            $sql = ('SELECT internships.ID_internship, name_internship, duration_internship, remuneration_internship, offer_date_internship, place_number_internship, competences_internship, promotions.name_promotion FROM internships LEFT JOIN internship_for_promo ON internships.ID_internship = internship_for_promo.ID_internship LEFT JOIN promotions ON internship_for_promo.ID_promotion = promotions.ID_promotion;');
+            $sql = ('SELECT users.ID_user, username, firstname_user, lastname_user, email_user, city_localisation, promotions.name_promotion FROM users INNER JOIN roles ON roles.ID_role=users.ID_role INNER JOIN localisations ON localisations.ID_localisation=users.ID_localisation INNER JOIN user_belong_promo ON user_belong_promo.ID_user=users.ID_user INNER JOIN promotions ON promotions.ID_promotion=user_belong_promo.ID_promotion WHERE roles.name_role = "Pilote";');
 
-            $query_perm = $bdd->prepare('SELECT users.ID_user, username, firstname_user, lastname_user, email_user, city_localisation, promotions.name_promotion FROM users INNER JOIN roles ON roles.ID_role=users.ID_role INNER JOIN localisations ON localisations.ID_localisation=users.ID_localisation INNER JOIN user_belong_promo ON user_belong_promo.ID_user=users.ID_user INNER JOIN promotions ON promotions.ID_promotion=user_belong_promo.ID_promotion WHERE roles.name_role = "Pilote";');
+            $query_perm = $bdd->prepare('SELECT username, code_permission FROM users NATURAL JOIN roles NATURAL JOIN roles_has_permissions NATURAL JOIN permissions WHERE code_permission=:perm AND username=:user;');
             $query_perm->execute(['user' => $_COOKIE["username"], 'perm' => "SFx2"]);
             if ($query_perm->rowCount() == 1) {
                 $query_pilots = $bdd->prepare($sql);
@@ -19,7 +19,6 @@ if (isset($_COOKIE['username']) && isset($_COOKIE['pass'])) {
                 $query_localisations = $bdd->prepare('SELECT ID_localisation, city_localisation FROM localisations GROUP BY city_localisation ORDER BY city_localisation ASC;');
                 $query_localisations->execute();
                 $results_localisations = $query_localisations->fetchALL(PDO::FETCH_OBJ);
-            }
 ?>
 <html lang="fr">
     <head>
@@ -94,7 +93,7 @@ if (isset($_COOKIE['username']) && isset($_COOKIE['pass'])) {
                                 <td><?= $result-> ID_user?></td>
                                 <td><?= $result->username ?></td>
                                 <td><?= $result->firstname_user ?></td>
-                                <td><?= $result->lastname ?></td>
+                                <td><?= $result->lastname_user ?></td>
                                 <td><?= $result->email_user ?></td>
                                 <td><?= $result->city_localisation ?></td>
                                 <td><?= $result->name_promotion ?></td>
@@ -116,6 +115,7 @@ if (isset($_COOKIE['username']) && isset($_COOKIE['pass'])) {
     </body>
 </html>
 <?php  
+            }
         } else {
             echo "<script>location.href='/';</script>";
         }
