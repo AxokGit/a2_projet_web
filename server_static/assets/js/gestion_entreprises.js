@@ -1,8 +1,6 @@
 var ID_company=0;
 
 $(document).ready(function(){
-    $("#modal_stat").show();
-
     $("#li_gestion_entreprises").delay(2000).addClass("hover");
 
 
