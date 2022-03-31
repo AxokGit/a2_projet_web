@@ -25,9 +25,11 @@ $(document).ready(function(){
     }
 
     $('.form_add_edit').on('submit',(function(){
-        $(".form_postuler").append('<input type="hidden" name="ID_internship" value="'+ window.ID_internship +'">');
+        $(".form_add_edit").append('<input type="hidden" name="ID_company" value="'+ window.ID_company +'">');
         return true;
     }));
+
+
 
 
     $(".logo_edit").click(function() {
