@@ -171,7 +171,7 @@ if (isset($_COOKIE['username']) && isset($_COOKIE['pass'])) {
                                     </div>
                                     <?= $result->city_localisation; ?> <?= $result->postal_code_localisation; ?>
                                     <div class="description">
-                                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Expedita maiores nostrum eum asperiores hic repellat perferendis soluta necessitatibus possimus sit! Eaque iste tenetur harum repellendus. Quam culpa dolores modi autem.
+                                        Si vous êtes intéressé par cette entreprise, veuillez consulter leur(s) offre(s) de stage directement dans la rubrique offre de stage en filtrant avec le nom de l'entreprise.
                                     </div>
                                 </div>
                                 <div class="divRight">  

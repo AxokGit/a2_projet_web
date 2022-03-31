@@ -23,15 +23,15 @@ $(document).ready(function(){
 
 
     $(".logo_delete").click(function() {
-        console.log($(this).attr("ID_internship"));
+        console.log($(this).attr("ID_user"));
         $.post(
             'controller/Manage_pilots.php',
             {
-                ID_company: $(this).attr("ID_internship"),
+                ID_user: $(this).attr("ID_user"),
                 action: "delete"},
             function(data, status, jqXHR) {
                 if (data.trim() == "false"){
-                    $(".info_message").html("Ce stage ne peut pas supprimer car il existe des candidatures en lien avec lui.");
+                    $(".info_message").html("Ce pilote ne peut pas supprimer car il existe des candidatures en lien avec lui.");
                     $(".info_message").css("background-color", "#df8787");
                     $(".info_message").css("display", "block");
                 } else if (data.trim() == "true")
