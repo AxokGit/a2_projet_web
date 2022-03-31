@@ -146,7 +146,7 @@ if (isset($_COOKIE['username']) && isset($_COOKIE['pass'])) {
                                 <td><?= $result->name_promotion ?></td>
                                 <td>
                                     <div class="actions">
-                                        <i ID_internship="<?= $result->ID_internship ?>" class="fas fa-pen logo_edit"></i>
+                                        <i ID_internship="<?= $result->ID_internship ?>" name="<?= $result->name_internship ?>" activity_sector="<?= $result->activity_sector_company ?>" nb_intern="<?= $result->nb_intern_cesi_company ?>" email="<?= $result->email_company ?>" localisation="<?= $result->ID_localisation ?>" note="<?= $result->note ?>" visibility="<?= $result->visibility_company ?>" class="fas fa-pen logo_edit"></i>
                                         <i ID_internship="<?= $result->ID_internship ?>" class="fas fa-trash-alt logo_delete"></i>
                                     </div>
                                 </td>
