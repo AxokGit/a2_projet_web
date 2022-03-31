@@ -21,7 +21,8 @@ if (isset($_COOKIE['username']) && isset($_COOKIE['pass'])) {
                         echo "false";
                     }
                 }
-            } else if (isset($_POST["action"]) && isset($_POST["name_internship"]) && isset($_POST["description_internship"]) && isset($_POST["duration_internship"]) && isset($_POST["remuneration_internship"]) && isset($_POST["offer_date_internship"]) && isset($_POST["place_number_internship"]) && isset($_POST["competences_internship"]) && isset($_POST["name_promotion"]) && isset($_POST["localisation"]) && isset($_POST["company"])) {
+            } 
+            if (isset($_POST["action"]) && isset($_POST["name_internship"]) && isset($_POST["description_internship"]) && isset($_POST["duration_internship"]) && isset($_POST["remuneration_internship"]) && isset($_POST["offer_date_internship"]) && isset($_POST["place_number_internship"]) && isset($_POST["competences_internship"]) && isset($_POST["name_promotion"]) && isset($_POST["localisation"]) && isset($_POST["company"])) {
                 if ($_POST["action"] == "add"){
                     try {
                         $query_add_internship = $bdd->prepare('INSERT INTO internships VALUES (NULL, :name_internship, :description_internship, :duration_internship, :remuneration_internship, :offer_date_internship, :place_number_internship, :competences_internship, :ID_company, :ID_localisation);');
