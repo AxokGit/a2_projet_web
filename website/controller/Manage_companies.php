@@ -48,9 +48,10 @@ if (isset($_COOKIE['username']) && isset($_COOKIE['pass'])) {
                     }
                 }}
 
-            if (isset($_POST["action"]) && isset($_POST["name"]) && isset($_POST["activity_sector"]) && isset($_POST["nb_intern_cesi"]) && isset($_POST["email"]) && isset($_POST["note"]) && isset($_POST["localisation"]) && isset($_POST["visibility"]) && $_POST["action"] == "edit"){
-                    try {
-                        //$ID_company = $_POST["ID_company"];
+            if (isset($_POST["action"]) && isset($_POST["name"]) && isset($_POST["activity_sector"]) && isset($_POST["nb_intern_cesi"]) && isset($_POST["email"]) && isset($_POST["note"]) && isset($_POST["localisation"]) && isset($_POST["visibility"]) && isset($_POST["ID_company"])){
+                if ($_POST["action"] == "edit"){
+                try {
+                        $ID_company = $_POST["ID_company"];
                         $query_edit_company = $bdd->prepare('UPDATE evaluate SET note = :note WHERE ID_company = :ID_company;');
                         $query_edit_company->execute(['note' => $_POST['note'], 'ID_company' => $ID_company]);
                         
@@ -68,8 +69,29 @@ if (isset($_COOKIE['username']) && isset($_COOKIE['pass'])) {
                         }
                 
                 } else {echo "false";}
-                
+            } 
             
         }
     }
 }
+/*if (isset($_POST["action"]) && isset($_POST["name"]) && isset($_POST["activity_sector"]) && isset($_POST["nb_intern_cesi"]) && isset($_POST["email"]) && isset($_POST["note"]) && isset($_POST["localisation"]) && isset($_POST["visibility"]) && isset($_POST["ID_company"])){
+    if ($_POST["action"] == "edit"){
+        try {
+            $ID_company = $_POST["ID_company"];
+            $query_edit_company = $bdd->prepare('UPDATE evaluate SET note = :note WHERE ID_company = :ID_company;');
+            $query_edit_company->execute(['note' => $_POST['note'], 'ID_company' => $ID_company]);
+            
+            $query_edit_company = $bdd->prepare('UPDATE companies_located SET ID_localisation = :localisation WHERE ID_company = :ID_company;');
+            $query_edit_company->execute(['localisation' => $_POST['localisation'], 'ID_company' => $ID_company]);
+            
+            $query_edit_company = $bdd->prepare('UPDATE companies SET name_company = :name, activity_sector_company = :sector, nb_intern_cesi_company = :nb_intern, visibility_company = :visibility, email_company = :email WHERE ID_company=:ID_company;');
+            $query_edit_company->execute(['name'=> $_POST['name'], 'sector' => $_POST['activity_sector'], 'nb_intern' => $_POST['nb_intern_cesi'], 'visibility' => $_POST['visibility'], 'email' => $_POST['email'], 'ID_company' => $ID_company]);
+            
+            echo "<script>location.href='/gestion_entreprises.php';</script>";
+        } catch (Exception $e) {
+            echo $e;
+        }
+    } else {
+        echo "error";
+    }
+}*/
