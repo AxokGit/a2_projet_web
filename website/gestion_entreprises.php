@@ -29,7 +29,7 @@ if (isset($_COOKIE['username']) && isset($_COOKIE['pass'])) {
     <body>
         <div id="modal_add_edit" class="modal">
             <div class="modal-content">
-                <span class="close">&times;</span>
+                <span class="close" id="close_add_edit">&times;</span>
                 <div class="title_modal"></div>
                 <form class="form_add_edit" method="POST" action="/controller/Manage_companies.php">
                     <input type="hidden" name="action" value="add">
@@ -87,6 +87,13 @@ if (isset($_COOKIE['username']) && isset($_COOKIE['pass'])) {
                     </div>
                     <button type="submit">Ajouter</button>
                 </form>
+            </div>
+        </div>
+
+        <div id="modal_stat" class="modal">
+            <div class="modal-content">
+                <span class="close" id="close_stat">&times;</span>
+                <div class="title_modal">oui</div>
             </div>
         </div>
 

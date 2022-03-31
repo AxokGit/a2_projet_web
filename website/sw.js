@@ -42,22 +42,31 @@ self.addEventListener('activate', evt => {
     );
 });
 
-/*self.addEventListener('fetch', evt => {
+self.addEventListener('fetch', evt => {
     evt.respondWith(
         caches.match(evt.request).then(cacheRes => {
             console.log(evt.request);
-            return cacheRes || fetch(evt.request).then(fetchRes => {
-                return caches.open(dynamicCacheName).then(cache => {
-                    if (evt.request.url.indexOf('favoris') > -1){
+            if(evt.request.url.indexOf("favoris") > -1){
+                return fetch(evt.request).then(fetchRes => {
+                    return caches.open(dynamicCacheName).then(cache => {
                         cache.put(evt.request.url, fetchRes.clone());
-                    }
-                    return fetchRes;
-                })
-            });
+                        return cacheRes;
+                    })
+                }).catch(() => {
+                    console.log("BLAAAAA", evt.request.url)
+                    return cacheRes;
+                });
+            } else {
+                return cacheRes || fetch(evt.request).then(fetchRes => {
+                    return caches.open(dynamicCacheName).then(cache => {
+                        return fetchRes;
+                    })
+                });
+            }
+            
         }).catch(() => {
             console.log("Erreur d'accès à :", evt.request.url)
             return caches.match('/fallback.php');
         })
     );
 });
-*/

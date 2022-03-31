@@ -1,9 +1,11 @@
+var ID_company=0;
+
 $(document).ready(function(){
     $("#li_gestion_entreprises").delay(2000).addClass("hover");
 
 
     $(".logo_add").click(function() {
-        $(".modal").show();
+        $("#modal_add_edit").show();
         $(".title_modal").html("Ajout d'une entreprise");
         $("input[type='hidden']").attr("value","add");
         $("input[name='name']").attr("value","");
@@ -14,24 +16,28 @@ $(document).ready(function(){
         $(".info_message").css("display", "none");
     });
 
-    $(".close:eq(0)").click(function() {
-        $(".modal").hide();
+    $("#close_add_edit").click(function() {
+        $("#modal_add_edit").hide();
     });
 
     window.onclick = function(event) {
         if (event.target == document.getElementById("modal_add_edit")) {
-            $(".modal").hide();
+            $("#modal_add_edit").hide();
+        }
+        if (event.target == document.getElementById("modal_stat")) {
+            $("#modal_stat").hide();
         }
     }
 
     $('.form_add_edit').on('submit',(function(){
-        $(".form_postuler").append('<input type="hidden" name="ID_internship" value="'+ window.ID_internship +'">');
+        $(".form_add_edit").append('<input type="hidden" name="ID_company" value="'+ window.ID_company +'">');
         return true;
     }));
 
 
     $(".logo_edit").click(function() {
-        $(".modal").show();
+        $("#modal_add_edit").show();
+        window.ID_company = $(this).attr("ID_company");
         $(".title_modal").html("Modification d'une entreprise");
         $("input[type='hidden']").attr("value","edit");
         $("input[name='name']").attr("value",$(this).attr("name"));
@@ -64,6 +70,14 @@ $(document).ready(function(){
             );
     });
 
+    $(".logo_stat").click(function() {
+        console.log($(this).attr("ID_company"));
+        $("#modal_stat").show();
+    });
+
+    $("#close_stat").click(function() {
+        $("#modal_stat").hide();
+    });
 
 
 
