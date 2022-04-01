@@ -2,7 +2,7 @@ $(document).ready(function(){
     $("#li_gestion_stages").delay(2000).addClass("hover");
 
     $(".logo_add").click(function() {
-        $(".modal").show();
+        $("#modal_add_edit").show();
         $(".title_modal").html("Ajout d'un stage");
         $("input[type='hidden']").attr("value","add");
         $("#button_add_edit").html("Ajouter");
@@ -22,13 +22,16 @@ $(document).ready(function(){
         $(".info_message").css("display", "none");
     });
 
-    $(".close:eq(0)").click(function() {
+    $("#close_add_edit").click(function() {
         $(".modal").hide();
     });
 
     window.onclick = function(event) {
         if (event.target == document.getElementById("modal_add_edit")) {
-            $(".modal").hide();
+            $("#modal_add_edit").hide();
+        }
+        if (event.target == document.getElementById("modal_stat")) {
+            $("#modal_stat").hide();
         }
     }
 
@@ -75,4 +78,14 @@ $(document).ready(function(){
             }
             );
     });    
+
+
+    $(".logo_stat").click(function() {
+        console.log($(this).attr("ID_company"));
+        $("#modal_stat").show();
+    });
+
+    $("#close_stat").click(function() {
+        $("#modal_stat").hide();
+    });
 });

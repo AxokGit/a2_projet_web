@@ -179,10 +179,6 @@ if (isset($_COOKIE['username']) && isset($_COOKIE['pass'])) {
                         <?php } ?>
                     </table>
                 </div>
-                        
-                
-                
-                
             </div>
         </div>
 

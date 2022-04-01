@@ -84,25 +84,3 @@ if ('serviceWorker' in navigator) {
         .catch(err => {console.log(`[SW] Echec de l'enregistrement: ${err}`);});
     });
 }
-
-
-/*
-function getCookie(user) {
-    var cookieArr = document.cookie.split(";");
-    for (var i = 0; i < cookieArr.length; i++) {
-        var cookiePair = cookieArr[i].split("=");
-        if (user == cookiePair[0].trim()) {
-            return decodeURIComponent(cookiePair[1]);
-        }
-    }
-    return null;
-}
-
-function checkCookie() {
-    var username = getCookie("username");
-    var pass = getCookie("pass");
-    if (!(username != "" && username != null && pass != null && pass != null)) {
-        console.log("no cookie");
-    }
-}
-checkCookie();*/

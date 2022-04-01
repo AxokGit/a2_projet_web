@@ -53,7 +53,7 @@ self.addEventListener('fetch', evt => {
                         return cacheRes;
                     })
                 }).catch(() => {
-                    console.log("BLAAAAA", evt.request.url)
+                    console.log(evt.request.url)
                     return cacheRes;
                 });
             } else {
