@@ -3,6 +3,6 @@ AuthType Basic
 AuthName "Page protégée" 
 
 AuthBasicProvider file 
-AuthUserFile "D:\OneDrive\OneDrive - Association Cesi Viacesi mail\01 Pro\Semestre 1\Projet_4 - Développement Web\Livrable 3\a2_projet_web\documents\.users_auth 
+AuthUserFile "C:\Web\a2_projet_web\a2_projet_web\website\documents\.users_auth 
 
 Require valid-user
