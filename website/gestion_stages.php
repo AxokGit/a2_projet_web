@@ -9,7 +9,7 @@ if (isset($_COOKIE['username']) && isset($_COOKIE['pass'])) {
         $query_check_cookie = $bdd->prepare('SELECT * FROM users NATURAL JOIN roles NATURAL JOIN roles_has_permissions NATURAL JOIN permissions WHERE code_permission="SFx1" AND username=:user AND password_user=:password_user;');
         $query_check_cookie->execute(['user' => $_COOKIE['username'], 'password_user' => $_COOKIE['pass']]);
         if ($query_check_cookie->rowCount() == 1){
-            $sql = 'SELECT internships.ID_internship, name_internship, duration_internship, remuneration_internship, offer_date_internship, place_number_internship, competences_internship, promotions.name_promotion FROM internships LEFT JOIN internship_for_promo ON internships.ID_internship = internship_for_promo.ID_internship LEFT JOIN promotions ON internship_for_promo.ID_promotion = promotions.ID_promotion;';
+            $sql = 'SELECT internships.ID_internship, name_internship, description_internship, duration_internship, remuneration_internship, offer_date_internship, place_number_internship, competences_internship, GROUP_CONCAT(promotions.name_promotion SEPARATOR ", ") AS "name_promotion", ID_company, name_company, ID_localisation, promotions.ID_promotion FROM internships NATURAL JOIN companies NATURAL JOIN localisations LEFT JOIN internship_for_promo ON internships.ID_internship = internship_for_promo.ID_internship LEFT JOIN promotions ON internship_for_promo.ID_promotion = promotions.ID_promotion GROUP BY internships.ID_internship;';
 
             $query_perm = $bdd->prepare('SELECT username, code_permission FROM users NATURAL JOIN roles NATURAL JOIN roles_has_permissions NATURAL JOIN permissions WHERE code_permission=:perm AND username=:user;');
             $query_perm->execute(['user' => $_COOKIE["username"], 'perm' => "SFx2"]);
@@ -77,7 +77,7 @@ if (isset($_COOKIE['username']) && isset($_COOKIE['pass'])) {
                             <div class="flex-table">
                                 <div class="flex-row name">Promotion :</div>
                                 <div class="flex-row value">
-                                    <select class="input" name="name_promotion" id="select_name_promotion" required>
+                                    <select class="input" name="promotion" id="select_name_promotion" required>
                                         <option value="" selected>--Choisir une promotion--</option>
                                         <?php foreach ($results_promotions as $result) { ?>
                                             <option value="<?= $result->ID_promotion ?>"><?= $result->name_promotion ?></option>
@@ -100,7 +100,7 @@ if (isset($_COOKIE['username']) && isset($_COOKIE['pass'])) {
                             <div class="flex-row name">Entreprise :</div>
                             <div class="flex-row value">
                                 <select class="input" name="company" id="select_company" required>
-                                    <option value="">--Choisir une entrprise--</option>
+                                    <option value="">--Choisir une entreprise--</option>
                                     <?php foreach ($results_company as $result) { ?>
                                         <option value="<?= $result->ID_company ?>"><?= $result->name_company ?></option>
                                     <?php } ?>
@@ -108,7 +108,7 @@ if (isset($_COOKIE['username']) && isset($_COOKIE['pass'])) {
                             </div>
                         </div>
                         </div>
-                        <button type="submit">Ajouter</button>
+                        <button id="button_add_edit" type="submit">Ajouter</button>
                     </form>
                 </div>
             </div>
@@ -146,7 +146,7 @@ if (isset($_COOKIE['username']) && isset($_COOKIE['pass'])) {
                                 <td><?= $result->name_promotion ?></td>
                                 <td>
                                     <div class="actions">
-                                        <i ID_internship="<?= $result->ID_internship ?>" name="<?= $result->name_internship ?>" activity_sector="<?= $result->activity_sector_company ?>" nb_intern="<?= $result->nb_intern_cesi_company ?>" email="<?= $result->email_company ?>" localisation="<?= $result->ID_localisation ?>" note="<?= $result->note ?>" visibility="<?= $result->visibility_company ?>" class="fas fa-pen logo_edit"></i>
+                                        <i ID_internship="<?= $result->ID_internship ?>" name="<?= $result->name_internship ?>" description="<?= $result->description_internship ?>" duration="<?= $result->duration_internship ?>" remuneration="<?= $result->remuneration_internship ?>" offer_date="<?= $result->offer_date_internship ?>" place_number="<?= $result->place_number_internship ?>" competences="<?= $result->competences_internship ?>" id_promotion="<?= $result->ID_promotion ?>" id_localisation="<?= $result->ID_localisation ?>" id_company="<?= $result->ID_company ?>" class="fas fa-pen logo_edit"></i>
                                         <i ID_internship="<?= $result->ID_internship ?>" class="fas fa-trash-alt logo_delete"></i>
                                     </div>
                                 </td>

@@ -4,17 +4,21 @@ $(document).ready(function(){
     $(".logo_add").click(function() {
         $(".modal").show();
         $(".title_modal").html("Ajout d'un stage");
-        $("input[type='hidden']").attr("value","edit");
-        $("input[name='name_internship']").attr("value",$(this).attr("name_internship"));
-        $("input[name='description_internship']").attr("value",$(this).attr("description_internship"));
-        $("input[name='duration_internship']").attr("value",$(this).attr("duration_internship"));
-        $("input[name='remuneration_internship']").attr("value",$(this).attr("remuneration_internship"));
-        $("input[name='offer_date_internship']").attr("value",$(this).attr("offer_date_internship"));
-        $("input[name='place_number_internship']").attr("value",$(this).attr("place_number_internship"));
-        $("input[name='competences_internship']").attr("value",$(this).attr("competences_internship"));
-        $("select[name='name_promotion'] option[value="+$(this).attr("name_promotion")+"]").prop('selected', true);
-        $("select[name='localisation'] option[value="+$(this).attr("localisation")+"]").prop('selected', true);
-        $("select[name='company'] option[value="+$(this).attr("company")+"]").prop('selected', true);
+        $("input[type='hidden']").attr("value","add");
+        $("#button_add_edit").html("Ajouter");
+        $("input[type='hidden']").attr("value","add");
+        $("input[name='name_internship']").attr("value","");
+        $("input[name='description_internship']").attr("value","");
+        $("input[name='duration_internship']").attr("value","");
+        $("input[name='remuneration_internship']").attr("value","");
+        $("input[name='offer_date_internship']").attr("value","");
+        $("input[name='place_number_internship']").attr("value","");
+        $("input[name='competences_internship']").attr("value","");
+
+        $("#select_name_promotion").val($("#select_name_promotion option:first").val());
+        $("#select_localisation").val($("#select_localisation option:first").val());
+        $("#select_company").val($("#select_company option:first").val());
+
         $(".info_message").css("display", "none");
     });
 
@@ -39,16 +43,18 @@ $(document).ready(function(){
         window.ID_internship = $(this).attr("ID_internship");
         $(".title_modal").html("Modification d'un stage");
         $("input[type='hidden']").attr("value","edit");
-        $("input[name='name_internship']").attr("value",$(this).attr("name_internship"));
-        $("input[name='description_internship']").attr("value",$(this).attr("description_internship"));
-        $("input[name='duration_internship']").attr("value",$(this).attr("duration_internship"));
-        $("input[name='remuneration_internship']").attr("value",$(this).attr("remuneration_internship"));
-        $("input[name='offer_date_internship']").attr("value",$(this).attr("offer_date_internship"));
-        $("input[name='place_number_internship']").attr("value",$(this).attr("place_number_internship"));
-        $("input[name='competences_internship']").attr("value",$(this).attr("competences_internship"));
-        $("select[name='name_promotion'] option[value="+$(this).attr("name_promotion")+"]").prop('selected', true);
-        $("select[name='localisation'] option[value="+$(this).attr("localisation")+"]").prop('selected', true);
-        $("select[name='company'] option[value="+$(this).attr("company")+"]").prop('selected', true);
+        $("#button_add_edit").html("Modifier");
+
+        $("input[name='name_internship']").attr("value",$(this).attr("name"));
+        $("input[name='description_internship']").attr("value",$(this).attr("description"));
+        $("input[name='duration_internship']").attr("value",$(this).attr("duration"));
+        $("input[name='remuneration_internship']").attr("value",$(this).attr("remuneration"));
+        $("input[name='offer_date_internship']").attr("value",$(this).attr("offer_date"));
+        $("input[name='place_number_internship']").attr("value",$(this).attr("place_number"));
+        $("input[name='competences_internship']").attr("value",$(this).attr("competences"));
+        $("select[name='promotion'] option[value="+$(this).attr("id_promotion")+"]").prop('selected', true);
+        $("select[name='localisation'] option[value="+$(this).attr("id_localisation")+"]").prop('selected', true);
+        $("select[name='company'] option[value="+$(this).attr("id_company")+"]").prop('selected', true);
         $(".info_message").css("display", "none");
     });
 
