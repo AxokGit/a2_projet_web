@@ -9,9 +9,31 @@ if (isset($_COOKIE['username']) && isset($_COOKIE['pass'])) {
 		if ($query_check_cookie->rowCount() == 1){
             $sql = 'SELECT companies.ID_company, name_company, activity_sector_company, nb_intern_cesi_company, email_company, visibility_company, companies_located.ID_localisation, note FROM companies LEFT JOIN companies_located ON companies.ID_company=companies_located.ID_company LEFT JOIN localisations ON companies_located.ID_localisation=localisations.ID_localisation INNER JOIN evaluate ON companies.ID_company = evaluate.ID_company;';
 
-            $query_perm = $bdd->prepare('SELECT username, code_permission FROM users NATURAL JOIN roles NATURAL JOIN roles_has_permissions NATURAL JOIN permissions WHERE code_permission=:perm AND username=:user;');
-            $query_perm->execute(['user' => $_COOKIE["username"], 'perm' => "SFx2"]);
-            if ($query_perm->rowCount() == 1) {
+            $query_perm_nav = $bdd->prepare('SELECT username, code_permission FROM users NATURAL JOIN roles NATURAL JOIN roles_has_permissions NATURAL JOIN permissions WHERE username = :user;');
+            $query_perm_nav->execute(['user' => $_COOKIE["username"]]);
+            $results_nav = $query_perm_nav->fetchALL(PDO::FETCH_OBJ);
+            if ($query_perm_nav->rowCount() >= 1) {
+                $gestion_Enterprises_create = false;
+                $gestion_Enterprises_edit = false;
+                $gestion_Enterprises_delete = false;
+                $gestion_Enterprises_stat = false;
+                
+                foreach($results_nav as $result){
+                    if ($result->code_permission == "SFx3"){
+                        $gestion_Enterprises_create = true;
+                    }
+                    if ($result->code_permission == "SFx4"){
+                        $gestion_Enterprises_edit = true;
+                    }
+                    if ($result->code_permission == "SFx6"){
+                        $gestion_Enterprises_delete = true;
+                    }
+                    if ($result->code_permission == "SFx7"){
+                        $gestion_Enterprises_stat = true;
+                    }
+                }
+            }
+            if ($gestion_Enterprises_create || $gestion_Enterprises_edit || $gestion_Enterprises_delete || $gestion_Enterprises_stat) {
                 $query_companies = $bdd->prepare($sql);
                 $query_companies->execute();
                 $results_companies = $query_companies->fetchALL(PDO::FETCH_OBJ);
@@ -105,7 +127,7 @@ if (isset($_COOKIE['username']) && isset($_COOKIE['pass'])) {
         <div id="modal_stat" class="modal">
             <div class="modal-content">
                 <span class="close" id="close_stat">&times;</span>
-                <div class="title_modal">Top des entreprises ayant le plus de stages</div>
+                <div class="title_modal2">Top des entreprises ayant le plus de stages</div>
                 <div class="modal_stat_table">
                     <table class="table">
                         <tr>
@@ -123,7 +145,7 @@ if (isset($_COOKIE['username']) && isset($_COOKIE['pass'])) {
                         <?php } ?>
                     </table>
                 </div>
-                <div class="title_modal">Top des entreprises ayant le plus d'étudiants CESI</div>
+                <div class="title_modal2">Top des entreprises ayant le plus d'étudiants CESI</div>
                 <div class="modal_stat_table">
                     <table class="table">
                         <tr>
@@ -140,7 +162,7 @@ if (isset($_COOKIE['username']) && isset($_COOKIE['pass'])) {
                         <?php } ?>
                     </table>
                 </div>
-                <div class="title_modal">Top des entreprises ayant les meilleures notes</div>
+                <div class="title_modal2">Top des entreprises ayant les meilleures notes</div>
                 <div class="modal_stat_table">
                     <table class="table">
                         <tr>
@@ -171,7 +193,12 @@ if (isset($_COOKIE['username']) && isset($_COOKIE['pass'])) {
                 <div class="content">
                     <div class="content_title">Gestion des entreprises</div>
                     <div class="info_message">L'entreprise a été supprimé !</div>
-                    <div class="logo_plus"><i class="fas fa-plus-square logo_add"></i> <i class="fas fa-chart-bar logo_stat"></i></div>
+                    <div class="logo_plus">
+                        <?php
+                        if ($gestion_Enterprises_create) { echo '<i class="fas fa-plus-square logo_add"></i>'; }
+                        if ($gestion_Enterprises_stat) { echo '<i class="fas fa-chart-bar logo_stat"></i>'; }
+                        ?>
+                    </div>
                     <div class="table">
                         <table class="table">
                             <tr>
@@ -181,7 +208,7 @@ if (isset($_COOKIE['username']) && isset($_COOKIE['pass'])) {
                                 <td>Nb stagiaires CESI</td>
                                 <td>Email</td>
                                 <td>Visibilité</td>
-                                <td>Actions</td>
+                                <?php if ($gestion_Enterprises_edit || $gestion_Enterprises_delete) { echo '<td>Actions</td>';} ?>
                             </tr>
                             <?php foreach ($results_companies as $result) { ?>
                             <tr>
@@ -191,12 +218,16 @@ if (isset($_COOKIE['username']) && isset($_COOKIE['pass'])) {
                                 <td><?= $result->nb_intern_cesi_company ?></td>
                                 <td><?= $result->email_company ?></td>
                                 <td><?= $result->visibility_company ?></td>
+                                <?php if ($gestion_Enterprises_edit || $gestion_Enterprises_delete) { ?>
                                 <td>
                                     <div class="actions">
-                                        <i ID_company="<?= $result->ID_company ?>" name="<?= $result->name_company ?>" activity_sector="<?= $result->activity_sector_company ?>" nb_intern="<?= $result->nb_intern_cesi_company ?>" email="<?= $result->email_company ?>" localisation="<?= $result->ID_localisation ?>" note="<?= $result->note ?>" visibility="<?= $result->visibility_company ?>" class="fas fa-pen logo_edit"></i>
-                                        <i ID_company="<?= $result->ID_company ?>" class="fas fa-trash-alt logo_delete"></i>
+                                        <?php
+                                        if ($gestion_Enterprises_edit) { echo "<i ID_company='$result->ID_company' name='$result->name_company' activity_sector='$result->activity_sector_company' nb_intern='$result->nb_intern_cesi_company' email='$result->email_company' localisation='$result->ID_localisation' note='$result->note' visibility='$result->visibility_company' class='fas fa-pen logo_edit'></i>";}
+                                        if ($gestion_Enterprises_delete) { echo "<i ID_company='$result->ID_company' class='fas fa-trash-alt logo_delete'></i>";}
+                                        ?>
                                     </div>
                                 </td>
+                                <?php } ?>
                             </tr>
                             <?php } ?>
                         </table>

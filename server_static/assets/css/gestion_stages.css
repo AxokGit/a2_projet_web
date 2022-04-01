@@ -3,8 +3,187 @@
 
 .content_title
 {
-  text-align: center;
-  margin: 10px;
-  font-size:calc(30px + 1vw);
-  font-weight: bold;
+    text-align: center;
+    margin: 10px;
+    font-size:calc(30px + 1vw);
+    font-weight: bold;
+}
+
+.info_message
+{
+    display: none;
+    width: 80%;
+    margin: 10px auto 20px auto;
+    padding: 10px;
+    border-radius: 10px;
+    text-align: center;
+}
+
+.logo_plus i,
+.actions i
+{
+    margin: 0 10px;
+    cursor: pointer;
+    color: black;
+}
+
+.logo_plus
+{
+    text-align: center;
+    font-size: 2em;
+}
+
+.table {
+    margin: 0 auto 0 auto;
+    padding: 10px;
+    text-align: center;
+    overflow: auto;
+    border-collapse: collapse;
+}
+
+.table tr:first-child td {
+    background-color: #a79c9c;
+  }
+
+
+table td {
+    min-width: 100px;
+    width: calc(100% / 8);
+    padding: 5px;
+    border: solid 1px black;
+}
+
+/*//////////////////////////////////////////////////////////////////
+[ Modal ] */
+
+.modal
+{
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgb(0,0,0);
+    background-color: rgba(0,0,0,0.7);
+}
+
+.title_modal
+{
+    border-radius: 10px 10px 0 0;
+    padding: 10px;
+    font-weight: bold;
+    font-size: 2em;
+    text-align: center;
+}
+
+.modal-content 
+{
+    background-color: #ffffff;
+    margin: 15% auto;
+    width: 80%;
+    border-radius: 10px;
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.info_message
+{
+  display: none;
+  width: 80%;
+  margin: 10px auto 20px auto;
+  padding: 10px;
+  border-radius: 10px;
+}
+
+.form_add_edit .input
+{
+    width: 80%;
+    height: 25px;
+    margin-left: 10px;
+    font-size: 20px;
+}
+
+.form_add_edit button, .form_add_edit input[type="button"]
+{
+    margin: 10px;
+    width: 120px;
+    height: 40px;
+    font-size: 20px;
+}
+
+.close 
+{
+    color: #aaa;
+    float: right;
+    font-size: 40px;
+    font-weight: bold;
+    right: -20px;
+    margin-right: 20px;
+}
+
+.close:hover, .close:focus 
+{
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.table-container {
+    display: block;
+    width: 90%;
+    max-width: 900px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  
+  .flex-table {
+    display: flex;
+    flex-flow: row wrap;
+  }
+  
+  .flex-row {
+    width: calc(100% / 2);
+    text-align: center;
+    padding: 0.2em 0.2em;
+  }
+  
+  .flex-table .name
+  {
+    text-align: left;
+  }
+  
+  .flex-table .value
+  {
+    text-align: right;
+  }
+
+
+/*//////////////////////////////////////////////////////////////////
+[ Responsive ]*/
+
+@media screen and (max-width: 900px)
+{
+    .modal-content
+    {
+      width: 90%;
+    }
+}
+
+@media screen and (max-width: 500px) {
+  .flex-row {
+    width: 100%;
+  }
+  .flex-table .name
+  {
+    text-align: left;
+    font-weight: bold ;
+  }
+  .flex-table .value
+  {
+    text-align: center;
+  }
 }
