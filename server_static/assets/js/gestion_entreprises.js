@@ -67,7 +67,14 @@ $(document).ready(function(){
             );
     });
 
+    $(".logo_stat").click(function() {
+        console.log($(this).attr("ID_company"));
+        $("#modal_stat").show();
+    });
 
+    $("#close_stat").click(function() {
+        $("#modal_stat").hide();
+    });
 
 
 
